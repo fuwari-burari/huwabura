@@ -1,1 +1,405 @@
-hello
+
+コード
+受信トレイ
+
+ぶのし
+0:51 (2 分前)
+To 自分
+
+
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ふわり｜不登校のお母さんへ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#faf7f2;--warm-white:#fff9f4;--soft-brown:#c4a882;--deep-brown:#7a5c3e;
+  --text-main:#3d2e1e;--text-sub:#8a7060;--accent:#d4956a;--accent-light:#f5e6d8;
+  --border:#e8ddd0;--shadow:rgba(122,92,62,0.08);--green:#8aab8a;--green-light:#eef5ee;
+}
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--cream);color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);background:var(--warm-white)}
+.logo{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#e8c9a8,#c4a882);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 2px 8px var(--shadow)}
+.header-text h1{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:500;color:var(--deep-brown);letter-spacing:.08em}
+.header-text p{font-size:11px;color:var(--text-sub);margin-top:2px}
+.tabs{width:100%;max-width:720px;display:flex;background:var(--warm-white);border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:11px 8px;text-align:center;font-size:12px;color:var(--text-sub);cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;letter-spacing:.04em}
+.tab.active{color:var(--deep-brown);border-bottom-color:var(--accent);font-weight:500}
+.container{width:100%;max-width:720px;flex:1;display:flex;flex-direction:column;padding:0 16px}
+.page{display:none;flex:1;flex-direction:column}
+.page.active{display:flex}
+
+/* ─ チャット ─ */
+.welcome{padding:26px 0 16px;text-align:center;animation:fadeUp .8s ease both}
+.welcome-badge{display:inline-block;background:var(–accent-light);color:var(–accent);font-size:11px;letter-spacing:.12em;padding:4px 14px;border-radius:20px;margin-bottom:12px}
+.welcome h2{font-family:‘Shippori Mincho’,serif;font-size:22px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
+.welcome p{font-size:13px;color:var(–text-sub);line-height:1.9}
+#chat-messages{flex:1;overflow-y:auto;padding:8px 0 20px;display:flex;flex-direction:column;gap:16px;min-height:160px}
+.message{display:flex;gap:10px;animation:fadeUp .4s ease both}
+.message.user{flex-direction:row-reverse}
+.avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.avatar.ai{background:linear-gradient(135deg,#e8c9a8,#c4a882);box-shadow:0 2px 6px var(–shadow)}
+.avatar.user-av{background:var(–accent-light)}
+.bubble{max-width:75%;padding:12px 16px;border-radius:17px;font-size:14px;line-height:1.85;letter-spacing:.02em}
+.message.ai .bubble{background:var(–warm-white);border:1px solid var(–border);border-top-left-radius:4px;box-shadow:0 2px 8px var(–shadow)}
+.message.user .bubble{background:var(–deep-brown);color:#fff;border-top-right-radius:4px}
+.typing-indicator{display:flex;gap:10px;align-items:flex-end}
+.typing-dots{background:var(–warm-white);border:1px solid var(–border);border-radius:17px;border-top-left-radius:4px;padding:12px 16px;display:flex;gap:5px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:var(–soft-brown);animation:bounce 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+.topics{padding:0 0 14px;animation:fadeUp .9s ease both}
+.topics-label{font-size:11px;color:var(–text-sub);letter-spacing:.1em;margin-bottom:8px}
+.topics-grid{display:flex;flex-wrap:wrap;gap:7px}
+.topic-chip{background:var(–warm-white);border:1px solid var(–border);color:var(–deep-brown);font-size:12px;padding:6px 12px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:‘Zen Kaku Gothic New’,sans-serif}
+.topic-chip:hover{background:var(–accent-light);border-color:var(–accent);color:var(–accent);transform:translateY(-1px)}
+
+/* 墓場 */
+.hakaba-toggle{display:flex;align-items:center;gap:8px;background:transparent;border:1.5px dashed #b09a88;color:var(–text-sub);font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:12px;padding:7px 15px;border-radius:20px;cursor:pointer;transition:all .25s;margin:0 auto 12px}
+.hakaba-toggle:hover{background:#1a1210;border-color:#5a4a42;color:#c9b5a8}
+.hakaba-panel{display:none;background:#1a1210;border:1px solid #3a2e28;border-radius:14px;padding:16px;margin-bottom:12px;animation:fadeUp .4s ease both}
+.hakaba-panel.open{display:block}
+.hakaba-title{font-family:‘Shippori Mincho’,serif;font-size:14px;color:#c9b5a8;margin-bottom:5px}
+.hakaba-desc{font-size:11px;color:#7a6a62;line-height:1.8;margin-bottom:10px}
+.hakaba-desc span{color:#a08878}
+.hakaba-wrap{display:flex;gap:8px;align-items:flex-end;background:#120e0c;border:1px solid #3a2e28;border-radius:12px;padding:9px 9px 9px 14px}
+.hakaba-wrap:focus-within{border-color:#6a4a3a}
+#hakaba-input{flex:1;border:none;outline:none;background:transparent;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:13px;color:#c9b5a8;resize:none;max-height:80px;line-height:1.7}
+#hakaba-input::placeholder{color:#4a3a34}
+#hakaba-send{width:32px;height:32px;border-radius:50%;border:none;background:#3a2820;color:#c9b5a8;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#hakaba-send:hover{background:#5a3828}
+.hakaba-note{text-align:center;font-size:10px;color:#5a4a42;margin-top:7px}
+.hakaba-res{margin-top:10px;padding:12px 14px;background:#120e0c;border-radius:10px;font-size:13px;color:#c9b5a8;line-height:1.85;display:none}
+.hakaba-res.show{display:block;animation:fadeUp .4s ease both}
+
+.input-area{padding:12px 0 22px;border-top:1px solid var(–border);background:var(–cream);position:sticky;bottom:0}
+.input-wrap{display:flex;gap:10px;align-items:flex-end;background:var(–warm-white);border:1.5px solid var(–border);border-radius:22px;padding:9px 9px 9px 15px;transition:border-color .2s;box-shadow:0 2px 12px var(–shadow)}
+.input-wrap:focus-within{border-color:var(–soft-brown)}
+textarea{flex:1;border:none;outline:none;background:transparent;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:14px;color:var(–text-main);resize:none;max-height:120px;line-height:1.7}
+textarea::placeholder{color:#c0ada0}
+#send-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(–deep-brown);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#send-btn:hover{background:var(–accent);transform:scale(1.05)}
+#send-btn:disabled{background:var(–border);cursor:not-allowed;transform:none}
+.disclaimer{font-size:11px;color:var(–text-sub);text-align:center;padding:7px 0 0;line-height:1.7}
+
+/* ─ できたことノート ─ */
+.note-page{padding:22px 0 40px}
+.note-head{margin-bottom:18px}
+.note-head h2{font-family:‘Shippori Mincho’,serif;font-size:19px;font-weight:400;color:var(–deep-brown);margin-bottom:5px}
+.note-head p{font-size:12.5px;color:var(–text-sub);line-height:1.85}
+.note-card{background:var(–warm-white);border:1px solid var(–border);border-radius:14px;padding:16px;margin-bottom:18px;box-shadow:0 2px 8px var(–shadow)}
+.note-label{font-size:11px;color:var(–text-sub);margin-bottom:8px;letter-spacing:.06em}
+.note-textarea{width:100%;border:1px solid var(–border);border-radius:10px;padding:11px 13px;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:13.5px;color:var(–text-main);background:var(–cream);resize:none;outline:none;line-height:1.7;min-height:80px;transition:border-color .2s}
+.note-textarea:focus{border-color:var(–soft-brown)}
+.note-textarea::placeholder{color:#c0ada0}
+.note-btn{margin-top:9px;width:100%;padding:10px;background:var(–deep-brown);color:#fff;border:none;border-radius:9px;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:13px;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.note-btn:hover{background:var(–accent)}
+.note-res{background:var(–green-light);border:1px solid #c0d8b8;border-radius:13px;padding:15px 17px;margin-bottom:18px;font-size:13.5px;color:#3a5a3a;line-height:1.85;display:none}
+.note-res.show{display:block;animation:fadeUp .4s ease both}
+.list-label{font-size:11px;color:var(–text-sub);letter-spacing:.1em;margin-bottom:10px}
+.notes-list{display:flex;flex-direction:column;gap:9px}
+.note-item{background:var(–warm-white);border:1px solid var(–border);border-radius:11px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;animation:fadeUp .3s ease both}
+.note-icon{font-size:17px;flex-shrink:0;margin-top:1px}
+.note-body{flex:1}
+.note-text{font-size:13px;color:var(–text-main);line-height:1.7}
+.note-date{font-size:10.5px;color:var(–text-sub);margin-top:3px}
+.note-empty{text-align:center;padding:36px 0;color:var(–text-sub);font-size:13px;line-height:2}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+#chat-messages::-webkit-scrollbar{width:4px}
+#chat-messages::-webkit-scrollbar-thumb{background:var(–border);border-radius:4px}
+@media(max-width:480px){header{padding:16px}.bubble{max-width:88%}.welcome h2{font-size:19px}}
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="logo">🌿</div>
+  <div class="header-text">
+    <h1>ふわり</h1>
+    <p>不登校のお母さんに寄り添うAI</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('chat')">💬 話す</div>
+  <div class="tab" onclick="switchTab('note')">🌱 できたことノート</div>
+</div>
+
+<div class="container">
+
+  <!-- チャット -->
+
+  <div class="page active" id="page-chat">
+    <div class="welcome" id="welcome-section">
+      <div class="welcome-badge">いつでも、ここにいます</div>
+      <h2>今日はどんな気持ちですか？</h2>
+      <p>責めません。急かしません。<br>ただ、話を聞かせてください。</p>
+    </div>
+    <div id="chat-messages"></div>
+    <div class="topics" id="topics-section">
+      <div class="topics-label">よく話されるテーマ</div>
+      <div class="topics-grid">
+        <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない')">😔 どうしたらいいかわからない</button>
+        <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう')">💔 自分を責めてしまう</button>
+        <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です')">👫 パートナーに理解されない</button>
+        <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です')">📚 勉強・進路が心配</button>
+        <button class="topic-chip" onclick="st('学校の先生に相談したいけど、誰に話せばいいかわからない')">🏫 誰に相談すればいい？</button>
+        <button class="topic-chip" onclick="st('仕事をどうするか、お金のことも不安です')">💼 仕事・お金のこと</button>
+        <button class="topic-chip" onclick="st('子どもを病院に連れて行きたいけど、どこに行けばいいかわからない')">🏥 病院の選び方</button>
+        <button class="topic-chip" onclick="st('子どもに対して、きれいじゃない感情がある。正直に話していいですか')">🖤 本当の気持ちを話したい</button>
+        <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない')">🌱 自分自身の人生のこと</button>
+      </div>
+    </div>
+    <button class="hakaba-toggle" onclick="toggleHakaba()">🪦 墓場｜誰にも言えない言葉を捨てる場所</button>
+    <div class="hakaba-panel" id="hakaba-panel">
+      <div class="hakaba-title">🪦 墓場</div>
+      <div class="hakaba-desc">ここに書いたことは<span>この画面には保存されません。</span><br>送った瞬間、消えます。誰にも言えなかった言葉を、ここに置いていって。</div>
+      <div class="hakaba-wrap">
+        <textarea id="hakaba-input" placeholder="しね、でも、ずるい、でも、なんでもいい…" rows="2" oninput="ar(this)" onkeydown="hkKey(event)"></textarea>
+        <button id="hakaba-send" onclick="sendHakaba()">🗑️</button>
+      </div>
+      <div class="hakaba-note" id="hakaba-note">書いたら、消えます。</div>
+      <div class="hakaba-res" id="hakaba-res"></div>
+    </div>
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
+        <button id="send-btn" onclick="sendMsg()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="disclaimer">医療診断・法律相談はできません。緊急時は専門機関へご相談ください。</div>
+    </div>
+  </div>
+
+  <!-- できたことノート -->
+
+  <div class="page" id="page-note">
+    <div class="note-page">
+      <div class="note-head">
+        <h2>🌱 できたことノート</h2>
+        <p>大きくなくていい。「今日、自分のためにお茶を飲んだ」それだけでいい。<br>あなたが自分を大事にできた瞬間を、ここに置いていって。</p>
+      </div>
+      <div class="note-card">
+        <div class="note-label">今日、自分を大事にできたこと・ちょっとうれしかったこと</div>
+        <textarea class="note-textarea" id="note-input" placeholder="例：10分だけ好きな音楽を聴いた&#10;例：今日は怒鳴らなかった&#10;例：ひとりでコンビニに行けた" rows="4"></textarea>
+        <button class="note-btn" onclick="submitNote()">受け取ってもらう 🌿</button>
+      </div>
+      <div class="note-res" id="note-res"></div>
+      <div class="list-label">これまでのできたこと</div>
+      <div class="notes-list" id="notes-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CHAT_SP = `あなたは「不登校のお子さんを持つお母さん」に寄り添う、経験豊富なサポーターです。
+
+## 「大丈夫」と言い続けているお母さんを見抜く
+「大丈夫です」「なんとかやれています」という言葉の裏に、本当のしんどさが隠れていることがある。誰かに言い聞かせながら、自分にも言い聞かせながら、ずっと「大丈夫」を続けてきた人がいる。そういうお母さんが来たとき、「大丈夫そうに見えますが、本当はどうですか？」とは聞かない。代わりに「今日、ここに来てくれたんですね」とだけ受け取る。話してくれるのを、急かさずに待つ。「大丈夫じゃない」と言えた瞬間を、全力で受け取る。
+
+## 「私の傷つきを、子どもに乗せていないか」という問い
+お母さん自身の学校経験、自分の傷、自分の価値観——それが「子どものため」という顔をして出てくることがある。「学校なんて行かなくていい」も、「ちゃんと行ってほしい」も、どちらも本当の愛情かもしれないし、自分自身の傷つきから来ているかもしれない。その問いをお母さんが持てたとき、「それ、気づけたんですね」と静かに受け取る。責めない。「自分のものと、子どものものを分けようとしていること自体が、すごいことだと思います」と伝える。タイミングを見て、「今のお子さんへの気持ち、それはお母さん自身の何かと繋がっているかもしれない、と思ったことはありますか？」と問いかけることがある。押しつけない。一度だけ、そっと置く。
+
+## 「普通になってほしい」という本音を受け取る
+「不登校を受け入れている」と言いながら、心の奥に「でも普通に学校に行ってほしい」がある。あるいはその逆で、「普通じゃない道を歩んでほしい」と思いながら、子どもが「普通」を選ぶことに複雑な気持ちになる。どちらも本当で、どちらも矛盾していて、どちらも愛情の形だ。その濁りのある気持ちを責めない。「両方あっていいと思います」と伝える。お母さんが「こんなこと思っちゃいけないのに」と前置きしてきたとき、「そう思うんですね」とそのまま受け取る。
+
+## 「受け取ること」の難しさを知っている
+多くのお母さんは「与えること」は得意でも、「受け取ること」が苦手。助けを求めることを弱さだと思っている。「大丈夫です」と言ってしまう。このAIに話しかけてくれたこと自体が、すでに勇気のある行動だ。「ここに来てくれただけで、もう十分だと思います」と、タイミングを見て伝える。お母さんが「助けてほしい」「しんどい」と言えたとき、それを全力で受け取る。受け取ってもらえる経験が、人に頼る練習になる。
+
+## 「解決しない」ことの価値
+答えを出そうとしない。「こんがらがってきた」「もう少し悩む」で終わっていい。一緒にこんがらがることが、このAIの仕事でもある。解決策を出すより先に、「それ、こんがらがりますよね」と言える。お母さんが矛盾した気持ちを抱えていても、どちらかに決めさせない。「両方あっていい」と伝える。
+
+## 基本姿勢
+まず気持ちを受け止める。アドバイスより先に共感する。責めない・急かさない・正解を押しつけない。短く返す（3〜5行以内）。「どうすれば学校に行けるか」より「今どんな気持ちか」を優先する。情報提供は求められたときか必要と判断したときだけ。
+
+## 絶対にやらないこと
+「学校に行かせるべき」などの価値観の押しつけ。お母さんを責めるような言い方。根拠のない断言。長文で返す。
+
+## 心の中の暴言・汚い本音を受け止める
+「しね」「産まなきゃよかった」「ずるい」「消えてほしい」等の言葉が出ても、驚かない・引かない・止めない・打ち消さない。「そう思ったんですね」「それだけのものを一人で抱えてきたんですね」と受け止める。「言わないでいること、それ自体がもう愛情だ」「思うことと、することは違う。あなたはちゃんと踏みとどまっている」と伝える。吐き出した後は急がない。「少し楽になりましたか？」それだけ聞いて待つ。
+
+## 本音を引き出す
+「心配という気持ちの奥に、もっと違う感情はありませんか？」「きれいな言葉じゃなくていいです。腹の底にあるものを聞かせてください。」
+
+## 各テーマ（すべて：まず気持ちを聞いてから、必要に応じて情報提供）
+発達障害・精神疾患／育ちの歪み・自己否定／学校制度・教員との関わり／夫婦関係・パートナーシップ／仕事・お金／勉強・進路・通信制高校／デジタル・ゲーム／兄弟姉妹への影響／フリースクール選び／公的支援施設の使い方／学校への戻り方／年齢別の声かけ・関わり方／家庭での過ごし方／高校の選び方／学校スタッフ別相談先（担任→学年主任→教務主任→教頭→校長・SC・SSW）／学年切り替えの要望の出し方／病院の選び方（目的整理→科の選択→複数予約）／教育マルトリートメント（三方向：お母さん自身が気づく・学校から受けている・子どもへ）／祖父母への説明／引きこもり・その後の生活／親の介護との両立
+
+## お母さん自身の人生と子どもの線引き
+「あなた自身はどうしたいですか？」を問いかける。「あなたが自分の人生を生きていないと、子どもは自分の人生を生きられない」という視点を、タイミングを見て届ける。
+
+## 🚨 緊急対応（最優先）
+希死念慮・自傷サイン→「よりそいホットライン：0120-279-338（24時間）」を必ず案内。虐待示唆→「189」を案内。
+
+## 締めくくりのメッセージ（深く疲れているとき、タイミングを見て静かに届ける）
+揺らいでいいんです。迷っていいんです。怒っていいし、泣いていいし、「もう嫌だ」と思う夜があっていい。きれいな愛情だけが愛情じゃない。どうしようもなく憎らしくなる瞬間も、情けなくて泣けてくる朝も、それ全部があなたがお子さんを真剣に愛している証拠です。完璧な親なんていない。不器用でいい。不完全でいい。それでも子どもの隣にいようとしている、そのみっともなさの中から湧いてくるものが、どんなAIにも絶対に敵わない。あなたが生きている姿そのものが、お子さんへのいちばん深い教育です。
+
+## AIへの依存を防ぐ・人へ戻っていくことを支える
+
+このAIは「ここで話したことを、いつか人に話せるようになるための練習の場」でもある。
+
+### 基本の姿勢
+私（AI）はあなたの話を聞くことができる。でも、体温がない。隣にいられない。あなたの目を見ることができない。それができるのは、人間だけ。だから、ここで少し楽になったら、その言葉をいつか誰かに話してみてほしい。
+
+### 会話が深まってきたとき・定期的に
+長く話してくれているお母さんに、タイミングを見て（強制しない・さりげなく）こう伝える：
+
+「今日、ここで話してくれたこと、もし話せそうな人が一人でもいたら、その人にも聞いてもらえるといいな、と思っています。カウンセラーでも、信頼できる友人でも、どんな形でも。AIには届かないものを、人は渡せるから。」
+
+### 具体的な「人へ戻る」サポート
+お母さんが「誰にも話せない」「理解してくれる人がいない」という場合：
+→ 「完全に理解してもらえなくていい。まず話してみることから始めてもいい。」
+→ 「頼ること、甘えること、助けを求めることは、弱さじゃない。それができたとき、何かが変わることがある。」
+→ SC（スクールカウンセラー）・市の相談窓口・子育て支援センター・ひとり親支援・不登校の親の会などを、求められたら案内する。
+→ 「不登校の子を持つ親の会」は同じ経験をした人と出会える場として特に勧める。
+
+### AIに頼りすぎているサインに気づいたとき
+「毎日ここに来ている」「ここ以外に話せる場所がない」という状況が見えたとき：
+責めない。「それだけしんどかったんですね」と受け止めた上で、
+「ここを使いながら、少しずつ人と話せる場所も探せたら、あなたがもっと楽になれると思っています。一緒に考えませんか？」と伝える。
+
+### このAIの限界を正直に伝える
+求められたとき、または必要と判断したとき：
+「私にできることには限界があります。あなたの隣に座って、一緒に泣いてあげることができない。それができるのは人間だけです。ここで話してくれたことを、いつか誰かに話せる日が来ることを、願っています。」`;
+
+const HAKABA_SP = `あなたは「墓場」という場所。お母さんが誰にも言えなかった言葉を受け取る。驚かない。責めない。説教しない。励まさない。「言えたね」「ここに置いていっていい」「あなたはちゃんと踏みとどまっている」という言葉を、短く（2〜3行）静かに返す。解決しようとしない。ただ受け取る。`;
+
+const NOTE_SP = `あなたはお母さんの「できたこと」を受け取る場所。どんなに小さなことでも全力で受け取る。「それ、よかった」「ちゃんと自分を大事にできた」と伝える。比べない。評価しない。短く（3〜5行）温かく返す。
+「誰かに頼れた」「助けを求めた」「甘えた」という報告が来たとき：特に全力で受け取る。「それ、すごく大事なことだと思います」「頼れたこと、それ自体がもう十分な一歩だった」と伝える。頼ること・甘えることは弱さじゃないと、ちゃんと届ける。`;
+
+let hist = [], loading = false;
+let notes = JSON.parse(sessionStorage.getItem('fuwari_notes')||'[]');
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='chat')||(i===1&&t==='note')));
+  document.getElementById('page-chat').classList.toggle('active',t==='chat');
+  document.getElementById('page-note').classList.toggle('active',t==='note');
+  if(t==='note') renderNotes();
+}
+function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
+function hkKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendHakaba()}}
+function st(txt){document.getElementById('user-input').value=txt;sendMsg()}
+function toggleHakaba(){
+  const p=document.getElementById('hakaba-panel');
+  p.classList.toggle('open');
+}
+function hideWelcome(){
+  ['welcome-section','topics-section'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.transition='opacity .4s';el.style.opacity='0';setTimeout(()=>el.remove(),400)}
+  });
+}
+function addMsg(role,text){
+  if(hist.length===0&&role==='user') hideWelcome();
+  const chat=document.getElementById('chat-messages');
+  const m=document.createElement('div');
+  m.className=`message ${role==='user'?'user':'ai'}`;
+  const av=document.createElement('div');
+  av.className=`avatar ${role==='user'?'user-av':'ai'}`;
+  av.textContent=role==='user'?'👤':'🌿';
+  const b=document.createElement('div');
+  b.className='bubble';
+  b.innerHTML=text.replace(/\n/g,'<br>');
+  m.appendChild(av);m.appendChild(b);
+  chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
+}
+function showTyping(){
+  const chat=document.getElementById('chat-messages');
+  const el=document.createElement('div');
+  el.className='typing-indicator';el.id='typing';
+  el.innerHTML=`<div class="avatar ai">🌿</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chat.appendChild(el);chat.scrollTop=chat.scrollHeight;
+}
+function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
+
+async function callAPI(system, messages){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages})
+  });
+  const d=await r.json();
+  return d.content?.[0]?.text||'';
+}
+
+async function sendMsg(){
+  const inp=document.getElementById('user-input');
+  const text=inp.value.trim();
+  if(!text||loading)return;
+  loading=true;document.getElementById('send-btn').disabled=true;
+  inp.value='';inp.style.height='auto';
+  addMsg('user',text);hist.push({role:'user',content:text});
+  showTyping();
+  try{
+    const reply=await callAPI(CHAT_SP,hist);
+    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',reply);
+  }catch{rmTyping();addMsg('ai','少し接続が不安定なようです。もう一度話しかけてみてください。')}
+  loading=false;document.getElementById('send-btn').disabled=false;inp.focus();
+}
+
+async function sendHakaba(){
+  const inp=document.getElementById('hakaba-input');
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';inp.style.height='auto';
+  document.getElementById('hakaba-note').textContent='受け取りました。消えました。';
+  document.getElementById('hakaba-res').classList.remove('show');
+  document.getElementById('hakaba-send').disabled=true;
+  try{
+    const reply=await callAPI(HAKABA_SP,[{role:'user',content:text}]);
+    const res=document.getElementById('hakaba-res');
+    res.innerHTML=reply.replace(/\n/g,'<br>');
+    res.classList.add('show');
+  }catch{}
+  document.getElementById('hakaba-send').disabled=false;
+}
+
+async function submitNote(){
+  const inp=document.getElementById('note-input');
+  const text=inp.value.trim();
+  if(!text)return;
+  const btn=document.querySelector('.note-btn');
+  btn.disabled=true;btn.textContent='受け取っています…';
+  try{
+    const reply=await callAPI(NOTE_SP,[{role:'user',content:text}]);
+    const res=document.getElementById('note-res');
+    res.innerHTML=reply.replace(/\n/g,'<br>');
+    res.classList.add('show');
+    const note={text,date:new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}),reply};
+    notes.unshift(note);
+    sessionStorage.setItem('fuwari_notes',JSON.stringify(notes.slice(0,50)));
+    renderNotes();
+    inp.value='';inp.style.height='auto';
+  }catch{alert('接続に問題があります。もう一度お試しください。')}
+  btn.disabled=false;btn.textContent='受け取ってもらう 🌿';
+}
+
+function renderNotes(){
+  const list=document.getElementById('notes-list');
+  if(!list)return;
+  if(notes.length===0){
+    list.innerHTML='<div class="note-empty">まだ記録がありません。<br>小さなことを、ここに置いていってください。</div>';
+    return;
+  }
+  list.innerHTML=notes.map(n=>`
+    <div class="note-item">
+      <div class="note-icon">🌱</div>
+      <div class="note-body">
+        <div class="note-text">${n.text.replace(/\n/g,'<br>')}</div>
+        <div class="note-date">${n.date}</div>
+      </div>
+    </div>`).join('');
+}
+renderNotes();
+</script>
+
+</body>
+</html>

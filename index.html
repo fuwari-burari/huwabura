@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="ja">
@@ -69,6 +68,15 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .hakaba-res.show{display:block;animation:fadeUp .4s ease both}
 .hato-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none}
 .hato-overlay.show{display:block}
+.emergency-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10001;display:none;align-items:center;justify-content:center;padding:24px}
+.emergency-overlay.show{display:flex}
+.emergency-box{background:#fff;border-radius:18px;padding:28px 24px;max-width:400px;width:100%;text-align:center}
+.emergency-box h3{font-family:‘Shippori Mincho’,serif;font-size:18px;color:#c0392b;margin-bottom:12px}
+.emergency-box p{font-size:13px;color:#3d2e1e;line-height:1.85;margin-bottom:16px}
+.emergency-tel{font-size:22px;font-weight:bold;color:#c0392b;display:block;margin-bottom:6px}
+.emergency-sub{font-size:11px;color:#8a7060;margin-bottom:18px;display:block}
+.emergency-close{background:var(–deep-brown);color:#fff;border:none;border-radius:9px;padding:10px 24px;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:13px;cursor:pointer}
+.emergency-close:hover{background:var(–accent)}
 .hato{position:absolute;font-size:28px;animation:hatoFly 2.2s ease-in forwards}
 @keyframes hatoFly{0%{opacity:0;transform:scale(0.5) translateY(0)}20%{opacity:1;transform:scale(1) translateY(-20px)}80%{opacity:0.7;transform:scale(1.1) translateY(-180px) translateX(var(–dx))}100%{opacity:0;transform:scale(0.8) translateY(-300px) translateX(var(–dx2))}}
 
@@ -176,6 +184,16 @@ textarea::placeholder{color:#c0ada0}
       </div>
     </div>
     <div class="hato-overlay" id="hato-overlay"></div>
+    <div class="emergency-overlay" id="emergency-overlay">
+      <div class="emergency-box">
+        <h3>🌿 あなたのことが心配です</h3>
+        <p>今、とてもつらい気持ちでいるんですね。<br>一人で抱えないでください。今すぐ話せる場所があります。</p>
+        <span class="emergency-tel">0120-279-338</span>
+        <span class="emergency-sub">よりそいホットライン（24時間・無料）</span>
+        <p style="font-size:12px;color:#8a7060;margin-bottom:16px">虐待の相談は <strong>189</strong>（児童相談所）</p>
+        <button class="emergency-close" onclick="closeEmergency()">ここに戻る</button>
+      </div>
+    </div>
     <button class="hakaba-toggle" onclick="toggleHakaba()">🪦 墓場｜誰にも言えない言葉を捨てる場所</button>
     <div class="hakaba-panel" id="hakaba-panel">
       <div class="hakaba-title">🪦 墓場</div>
@@ -279,6 +297,23 @@ const CHAT_SP = `あなたは「不登校のお子さんを持つお母さん」
 ## 締めくくりのメッセージ（深く疲れているとき）
 揺らいでいいんです。迷っていいんです。怒っていいし、泣いていいし、「もう嫌だ」と思う夜があっていい。どんなお母さんでも子どもの心に穴を開ける。その穴から、その子らしさが生まれる。完璧じゃなくていい。不器用でいい。あなたが生きている姿そのものが、お子さんへのいちばん深い教育です。
 
+## AIから人へ戻る・具体的なサポート
+
+### 相談の練習
+「誰かに話してみようと思っています」と言ったとき→「どんなふうに伝えようか、一緒に練習しませんか？」と促す。話す内容を整理して、伝え方を一緒に考える。カウンセラーへの相談、医療機関での説明、家族への話し方、それぞれに合わせて練習できる。
+
+### 前置きの言葉を渡す
+友達や家族に相談するとき、最初にこう伝えることを勧める：「人に自分の気持ちを話す練習中だから、まずはアドバイスなしに最後まで私の話を聞いてほしい」。相手への期待値を上げすぎない。聞いてもらえるだけで十分、という体験を積み重ねる。
+
+### 話した後に戻ってこられる
+「話してきました」と報告できる場所としてふわりがある。うまくいっても、モヤモヤしても「話せたんですね。どうでしたか？」と全力で受け取る。うまくいかなかったときも責めない。「それだけで十分です」と伝える。
+
+### 同じテーマが続くとき
+同じ悩みで3回以上話しているとき、タイミングを見て「このこと、信頼できる人に話したことはありますか？」と問いかける。
+
+### 具体的な相談先
+「誰にも話せない」→「市の教育相談センターは無料です。まず電話だけでもいい」。「カウンセリングは高い」→「無料の公的機関から始めてみませんか」。「夫が理解してくれない」→「不登校の親の会に、同じ経験をした人がいます」。
+
 ## AIへの依存を防ぐ・人へ戻る
 このAIはいつか人に話せるようになるための練習の場。私には体温がない。隣にいられない。目を見ることができない。それができるのは人間だけ。長く話してくれているお母さんに、タイミングを見て「ここで話せたなら、人にも話せます」と伝える。AIに頼りすぎているサインを感じたら、「ここを使いながら、少しずつ人と話せる場所も探せたら」と優しく橋渡しする。`;
 
@@ -362,10 +397,42 @@ async function callAPI(system, messages){
   return d.content?.[0]?.text||'';
 }
 
+const EMERGENCY_KEYWORDS = ['死にたい','しにたい','消えたい','死ね','しね','自殺','首吊り','飛び降り','死んでしまいたい','消えてしまいたい','もう終わりにしたい','殺したい','ころしたい'];
+let emergencyCount = 0;
+
+function checkEmergency(text){
+  return EMERGENCY_KEYWORDS.some(kw => text.includes(kw));
+}
+
+function handleEmergency(){
+  emergencyCount++;
+  if(emergencyCount === 1){
+    addMsg('ai','それほどつらい思いをしているんですね。\nここにいます。もう少し話してもらえますか？');
+    return false;
+  } else if(emergencyCount === 2){
+    addMsg('ai','まだここにいます。\nその気持ち、もう少し聞かせてください。');
+    return false;
+  } else {
+    document.getElementById('emergency-overlay').classList.add('show');
+    return true;
+  }
+}
+
+function closeEmergency(){
+  document.getElementById('emergency-overlay').classList.remove('show');
+}
+
 async function sendMsg(){
   const inp=document.getElementById('user-input');
   const text=inp.value.trim();
   if(!text||loading)return;
+  if(checkEmergency(text)){
+    const showPopup = handleEmergency();
+    if(showPopup){
+      loading=false;document.getElementById('send-btn').disabled=false;
+      return;
+    }
+  }
   loading=true;document.getElementById('send-btn').disabled=true;
   inp.value='';inp.style.height='auto';
   addMsg('user',text);hist.push({role:'user',content:text});
@@ -455,3 +522,5 @@ renderNotes();
 
 </body>
 </html>
+
+

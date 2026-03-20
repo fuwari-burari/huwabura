@@ -1,16 +1,3 @@
-何も選択されていません
-
-コンテンツへ
-Gmail でのスクリーン リーダーの使用
-1 / 432
-コード11
-受信トレイ
-
-ぶのし
-13:30 (0 分前)
-To 自分
-
-このメールは英語で書かれているようです
 export default async function handler(req, res) {
 res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
 res.setHeader(‘Access-Control-Allow-Methods’, ‘POST, OPTIONS’);

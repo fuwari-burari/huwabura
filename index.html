@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="ja">
@@ -447,20 +448,11 @@ let selfBlameCount = 0;
 const SELF_BLAME_WORDS = ['私のせい','私が悪い','私がダメ','私がいけない','母親失格','ダメな母','悪いお母さん'];
 
 function saveApiKey(){
-  const key = document.getElementById('apikey-input').value.trim();
-  if(!key || !key.startsWith('sk-')){
-    alert('APIキーは sk- から始まります。確認してください。');
-    return;
-  }
-  localStorage.setItem('fuwari_apikey', key);
-  API_KEY = key;
   document.getElementById('apikey-overlay').style.display='none';
 }
 
 function checkApiKey(){
-  if(API_KEY){
-    document.getElementById('apikey-overlay').style.display='none';
-  }
+  document.getElementById('apikey-overlay').style.display='none';
 }
 checkApiKey();
 
@@ -515,9 +507,9 @@ function showTyping(){
 function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
 
 async function callAPI(system, messages){
-  const r=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system,messages})
+  const r=await fetch('/api/chat',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({system,messages})
   });
   if(r.status===401){
     localStorage.removeItem('fuwari_apikey');

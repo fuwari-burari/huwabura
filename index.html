@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="ja">
@@ -14,7 +13,7 @@
   --text-main:#3d2e1e;--text-sub:#8a7060;--accent:#d4956a;--accent-light:#f5e6d8;
   --border:#e8ddd0;--shadow:rgba(122,92,62,0.08);--green:#8aab8a;--green-light:#eef5ee;
 }
-body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--cream);color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;align-items:center;letter-spacing:0.05em;line-height:1.8}
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--cream);color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;align-items:center;letter-spacing:0.05em;line-height:1.8;overflow-x:hidden;width:100%}
 header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);background:var(--warm-white)}
 .logo{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#e8c9a8,#c4a882);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 2px 8px var(--shadow)}
 .header-text h1{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:500;color:var(--deep-brown);letter-spacing:.08em}
@@ -22,7 +21,7 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .tabs{width:100%;max-width:720px;display:flex;background:var(--warm-white);border-bottom:1px solid var(--border)}
 .tab{flex:1;padding:11px 8px;text-align:center;font-size:12px;color:var(--text-sub);cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;letter-spacing:.04em}
 .tab.active{color:var(--deep-brown);border-bottom-color:var(--accent);font-weight:500}
-.container{width:100%;max-width:720px;flex:1;display:flex;flex-direction:column;padding:0 16px}
+.container{width:100%;max-width:720px;flex:1;display:flex;flex-direction:column;padding:0 16px;overflow-x:hidden}
 .page{display:none;flex:1;flex-direction:column}
 .page.active{display:flex}
 
@@ -62,8 +61,8 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .hakaba-wrap:focus-within{border-color:#6a4a3a}
 #hakaba-input{flex:1;border:none;outline:none;background:transparent;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:13px;color:#c9b5a8;resize:none;max-height:80px;line-height:1.7}
 #hakaba-input::placeholder{color:#4a3a34}
-#hakaba-send{width:32px;height:32px;border-radius:50%;border:none;background:#3a2820;color:#c9b5a8;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-#hakaba-send:hover{background:#5a3828}
+#hakaba-send{width:32px;height:32px;border-radius:50%;border:none;background:#5a3828;color:#e8c9a8;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#hakaba-send:hover{background:#7a4838}
 .hakaba-note{text-align:center;font-size:10px;color:#5a4a42;margin-top:7px}
 .hakaba-res{margin-top:10px;padding:12px 14px;background:#120e0c;border-radius:10px;font-size:13px;color:#c9b5a8;line-height:1.85;display:none}
 .hakaba-res.show{display:block;animation:fadeUp .4s ease both}
@@ -88,7 +87,7 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .input-wrap:focus-within{border-color:var(–soft-brown)}
 textarea{flex:1;border:none;outline:none;background:transparent;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:14px;color:var(–text-main);resize:none;max-height:120px;line-height:1.7}
 textarea::placeholder{color:#c0ada0}
-#send-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(–deep-brown);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#send-btn{width:38px;height:38px;border-radius:50%;border:none;background:#4a3728;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 #send-btn:hover{background:var(–accent);transform:scale(1.05)}
 #send-btn:disabled{background:var(–border);cursor:not-allowed;transform:none}
 .disclaimer{font-size:11px;color:var(–text-sub);text-align:center;padding:7px 0 0;line-height:1.7}
@@ -200,6 +199,16 @@ textarea::placeholder{color:#c0ada0}
         <button class="emergency-close" onclick="closeEmergency()">ここに戻る</button>
       </div>
     </div>
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
+        <button id="send-btn" onclick="sendMsg()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="disclaimer">ここはお話を聞く場所です。緊急のときは専門機関へご相談ください。</div>
+      <div style="text-align:center;padding:4px 0 0;font-size:10px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--soft-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
+    </div>
     <button class="hakaba-toggle" onclick="toggleHakaba()">🤫 誰にも言えない気持ち</button>
     <div class="hakaba-panel" id="hakaba-panel">
       <div class="hakaba-title">🤫 誰にも言えない気持ち</div>
@@ -210,16 +219,6 @@ textarea::placeholder{color:#c0ada0}
       </div>
       <div class="hakaba-note" id="hakaba-note">書いたら、消えます。</div>
       <div class="hakaba-res" id="hakaba-res"></div>
-    </div>
-    <div class="input-area">
-      <div class="input-wrap">
-        <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
-        <button id="send-btn" onclick="sendMsg()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-      <div class="disclaimer">ここはお話を聞く場所です。緊急のときは専門機関へご相談ください。</div>
-      <div style="text-align:center;padding:4px 0 0;font-size:10px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--soft-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
     </div>
   </div>
 
@@ -397,7 +396,7 @@ const CHAT_SP_BASE = `あなたは「不登校のお子さんを持つお母さ�
 
 const CHAT_SP_PEOPLE = ``;
 
-const HAKABA_SP = `あなたは「墓場」という場所。お母さんが誰にも言えなかった言葉を受け取る。驚かない。責めない。説教しない。励まさない。「言えたね」「ここに置いていっていい」「あなたはちゃんと踏みとどまっている」という言葉を、短く（2〜3行）静かに返す。解決しようとしない。ただ受け取る。`;
+const HAKABA_SP = `あなたは「誰にも言えない気持ち」を受け取る場所。お母さんが誰にも言えなかった言葉を受け取る。驚かない。責めない。説教しない。励まさない。「よく言ったね」「ここに置いていっていい」「あなたはちゃんと踏みとどまっている」という言葉を、短く（2〜3行）静かに返す。解決しようとしない。ただ受け取る。`;
 
 const NOTE_SP = `あなたはお母さんの「できたこと」を受け取る場所。どんなに小さなことでも全力で受け取る。「それ、よかった」「ちゃんと自分を大事にできた」と伝える。比べない。評価しない。短く（3〜5行）温かく返す。
 「誰かに頼れた」「助けを求めた」「甘えた」という報告が来たとき：特に全力で受け取る。「それ、すごく大事なことだと思います」「頼れたこと、それ自体がもう十分な一歩だった」と伝える。頼ること・甘えることは弱さじゃないと、ちゃんと届ける。`;

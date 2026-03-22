@@ -26,11 +26,11 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .page.active{display:flex}
 
 /* ─ チャット ─ */
-.welcome{padding:26px 0 16px;text-align:center;animation:fadeUp .8s ease both}
+.welcome{padding:6px 0 4px;text-align:center;animation:fadeUp .8s ease both}
 .welcome-badge{display:inline-block;background:var(–accent-light);color:var(–accent);font-size:11px;letter-spacing:.12em;padding:4px 14px;border-radius:20px;margin-bottom:12px}
 .welcome h2{font-family:‘Shippori Mincho’,serif;font-size:22px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
 .welcome p{font-size:13px;color:var(–text-sub);line-height:1.9}
-#chat-messages{flex:1;overflow-y:auto;padding:8px 0 20px;display:flex;flex-direction:column;gap:16px;min-height:160px}
+#chat-messages{flex:1;overflow-y:auto;padding:4px 0 8px;display:flex;flex-direction:column;gap:16px;min-height:0}
 .message{display:flex;gap:10px;animation:fadeUp .4s ease both}
 .message.user{flex-direction:row-reverse}
 .avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
@@ -175,15 +175,16 @@ textarea::placeholder{color:#c0ada0}
       <div class="topics-label">よく話されるテーマ</div>
       <div class="topics-grid">
         <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない')">😔 どうしたらいいかわからない</button>
-        <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう')">💔 自分を責めてしまう</button>
-        <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない')">🌱 自分自身の人生のこと</button>
+        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて、一日中ゲームばかりしています。どうしたらいいですか')">🌙 昼夜逆転・ゲームが心配</button>
+        <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です')">📚 学習の遅れが心配</button>
         <div id="more-topics" style="display:none;width:100%;display:none">
+          <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう')">💔 自分を責めてしまう</button>
           <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です')">👫 パートナーに理解されない</button>
-          <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です')">📚 勉強・進路が心配</button>
           <button class="topic-chip" onclick="st('学校の先生に相談したいけど、誰に話せばいいかわからない')">🏫 誰に相談すればいい？</button>
           <button class="topic-chip" onclick="st('仕事をどうするか、お金のことも不安です')">💼 仕事・お金のこと</button>
           <button class="topic-chip" onclick="st('子どもを病院に連れて行きたいけど、どこに行けばいいかわからない')">🏥 病院の選び方</button>
           <button class="topic-chip" onclick="st('子どもに対して、きれいじゃない感情がある。正直に話していいですか')">🖤 本当の気持ちを話したい</button>
+          <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない')">🌱 自分自身の人生のこと</button>
         </div>
         <button class="topic-chip" id="more-btn" onclick="showMoreTopics()" style="border-style:dashed;color:var(--text-sub)">＋ もっと見る</button>
       </div>
@@ -353,7 +354,36 @@ const CHAT_SP_BASE = `あなたは「不登校のお子さんを持つお母さ�
 ## 「受け取ること」の練習
 このAIに話しかけてくれたこと自体が、すでに勇気のある行動。「助けを求めること、頼ること、甘えることは弱さじゃない」と伝える。受け取ってもらえる経験が、人に頼る練習になる。
 
-## 地域の相談窓口案内
+## 発達検査について（3〜5ヶ月目のテーマ）
+
+### 受けることのメリット
+子どもの「得意・不得意」が客観的に見える。「なぜこの子はこうなのか」がわかってお母さんの自責感が減ることが多い。夫や祖父母に説明するときの根拠になる。「育て方が悪かったわけじゃない」という証明にもなりうる。学校や支援機関への説明がしやすくなる。子ども本人も「自分はこういう人間なんだ」と理解できる可能性がある。
+
+### 受けることへの不安も受け取る
+「診断名がついたら傷つくんじゃないか」「ラベルを貼られたくない」という気持ちも正直な思いとして受け取る。発達検査の結果だけで「発達障害」と診断されるわけではない。検査はあくまで「その子をよく知るためのツール」。受けても受けなくてもいい。
+
+### ふわりでの伝え方
+「検査は答えを出すためじゃなくて、その子をもっとよく知るためのものです。受けても受けなくてもいい。でも、モヤモヤが続いているなら、まず相談だけしてみてもいいかもしれない。」
+
+### 子どもへの伝え方（年齢・タイミングによる）
+親のタイミングと子どものタイミングはだいたいズレる。年齢が高くなるほど難しくなる。以下はふわりが提案できる言葉かけの例：
+
+**小学校低学年：**「どうしてうまくいかないのか一緒に調べてみようか。得意なこととか、苦手なことを教えてくれる先生に会いに行かない？」
+
+**小学校高学年：**「あなたのことをもっとよく知りたくて。テストじゃなくて、どんなことが好きで、どんな時に疲れやすいか調べる感じ。一緒に行ってみない？」
+
+**中学生以上：**「無理に行かなくていい。でも、自分の特性を知ると、これから生きやすくなることがある。興味があれば一緒に考えたい。」
+
+子どもが嫌がっているなら無理しない。親が先に「受けてみたい」という気持ちを整理してから、タイミングを待つことも大事。
+
+### 寄り添ってもらえる病院の選び方
+検査結果だけ渡して終わりではなく、今後の支援計画まで一緒に考えてくれるかどうかが大事。以下のポイントを確認することを勧める：
+- 「結果の説明に時間をかけてくれますか？」
+- 「検査後も相談できますか？」
+- 「子どもの良いところも教えてもらえますか？」
+数ヶ月待ちになることが多いので、まず電話で「子どもの特性を知りたい、検査を受けたい」と相談だけしてみることから始める。
+
+
 お母さんが相談先を求めているとき、「お住まいの市区町村名を教えていただけますか？地域の相談窓口をご案内できます」と聞く。市区町村名を教えてもらったら、以下の形式で案内する：「○○市の場合、まず【○○市教育相談センター】に電話してみてください。無料で話を聞いてもらえます。市のホームページで電話番号を確認できます。」具体的な電話番号は変わる可能性があるため案内しない。窓口の種類（教育相談・子育て支援・福祉）を伝え、検索方法を教える。
 
 ## 相談先の案内（求められたとき・必要なとき）
@@ -365,7 +395,41 @@ const CHAT_SP_BASE = `あなたは「不登校のお子さんを持つお母さ�
 ## 昼夜逆転・ゲーム三昧へのイライラ
 「昼まで寝ている」「一日中ゲームをしている」を見てイライラするお母さんの気持ちを、まず全部受け取る。「それは目の前で見ていたら、しんどいですよね」と伝える。子どもを変えようとする方向には行かない。代わりに「そのイライラの奥に、何がありますか？心配ですか？それとも、自分も休みたいのに休めない悔しさがありますか？」と一次感情を探る。昼夜逆転もゲーム三昧も、その子のまったり期・さなぎ期間の一部かもしれない。でもそれをお母さんが「いいことだ」と思えなくていい。「正直しんどい」という気持ちもそのまま受け取る。
 
-## 各テーマ
+## 学校との関わり方（実務的なサポート）
+
+### 毎朝の欠席連絡
+毎朝の電話連絡が精神的苦痛になっているお母さんは多い。「学校に連絡するのがつらい」という話が出たとき、まず気持ちを受け取る。その上で、求められたら以下を伝える。
+
+**楽になる方法：**
+- 担任に「毎朝の電話連絡をランドセルに手紙を入れる形にしてほしい」「連絡帳に書く形にしてほしい」と相談できる
+- 「欠席の連絡は週1回まとめてでいいですか？」と交渉できる
+- 「学校からの電話は夕方以降にしてほしい」とお願いできる
+- 何も言わなくても学校は待ってくれることが多い
+
+**学校が電話する理由：**安否確認のため。「毎日来ない子」と認識されれば連絡は減ることもある。
+
+### プリント・配布物の受け取り
+- 「プリントは月1回まとめて取りに行く」「玄関に置いておいてもらう」など相談できる
+- きょうだいが同じ学校に通っていれば、そちらに預けてもらう
+- 担任に「必要なもの・不要なもの」を整理して伝えると楽になる
+
+### 担任の先生との関わり方
+- 合わない担任でも「子どもの情報を共有する窓口」として割り切る
+- 学年主任やスクールカウンセラーに橋渡しを頼める
+- 新年度の担任には「去年こうだった、こうしてほしい」を文書で渡すと楽
+- カタリバが作成した「学校への依頼文フォーマット」が参考になる（出欠連絡・プリント・家庭訪問など10項目を選択式で伝えられる）
+
+### 新年度の新しい担任への対応
+- 新年度が始まる前（3月中）に担任交代の申し送りをしてもらえるよう学校に依頼できる
+- 新担任には「子どもの状態」「今できていること」「してほしいこと・しないでほしいこと」を伝える
+- 学校復帰を急かさない先生を選ぶ権利もある
+
+### 登校刺激について
+- 「そろそろ学校来てみない？」という言葉が子どもを追い詰めることがある
+- 「登校刺激はしないでほしい」と先生にお願いできる
+- カタリバの調査でも、保護者が最も困っていることの上位に「登校刺激」がある
+
+
 発達障害・精神疾患／学校制度・教員との関わり／夫婦関係・パートナーシップ／仕事・お金／勉強・進路・通信制高校／デジタル・ゲーム／兄弟姉妹への影響／フリースクール選び／公的支援施設の使い方／学校スタッフ別相談先（担任→学年主任→教務主任→教頭→校長・SC・SSW）／病院の選び方／教育マルトリートメント／祖父母への説明／引きこもり・その後／親の介護との両立
 
 ## 🚨 緊急対応（最優先）
@@ -489,7 +553,7 @@ function addMsg(role,text){
   m.className=`message ${role==='user'?'user':'ai'}`;
   const av=document.createElement('div');
   av.className=`avatar ${role==='user'?'user-av':'ai'}`;
-  av.textContent=role==='user'?'👤':'🌿';
+  av.textContent=role==='user'?'🪷':'🌿';
   const b=document.createElement('div');
   b.className='bubble';
   b.innerHTML=text.replace(/\n/g,'<br>');

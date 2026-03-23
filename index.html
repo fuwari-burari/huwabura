@@ -533,6 +533,17 @@ function addMsg(role,text){
     btn.onclick=(e)=>saveTaisetsu(text,btn,e);
     m.appendChild(btn);
   }
+  if(role==='user'){
+    const btn=document.createElement('button');
+    btn.className='star-btn';
+    btn.style.cssText='background:none;border:none;font-size:14px;cursor:pointer;padding:2px 6px;opacity:0.4;display:block;margin-top:2px;transition:opacity .2s';
+    btn.textContent='⭐';
+    btn.title='この言葉を夜空へ ✨';
+    btn.onmouseover=()=>btn.style.opacity='1';
+    btn.onmouseout=()=>{ if(!btn.disabled) btn.style.opacity='0.4'; };
+    btn.onclick=(e)=>saveTaisetsu(text,btn,e);
+    m.appendChild(btn);
+  }
   chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
 }
 function showTyping(){

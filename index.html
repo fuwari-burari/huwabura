@@ -65,7 +65,20 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 #hakaba-send:hover{background:#7a4838}
 .hakaba-note{text-align:center;font-size:10px;color:#5a4a42;margin-top:7px}
 .hakaba-res{margin-top:10px;padding:12px 14px;background:#120e0c;border-radius:10px;font-size:13px;color:#c9b5a8;line-height:1.85;display:none}
-.hakaba-res.show{display:block;animation:fadeUp .4s ease both}
+#page-taisetsu{background:linear-gradient(180deg,#0a0a1a 0%,#1a1a2e 50%,#0d0d20 100%);min-height:100vh}
+#page-taisetsu .note-page{background:transparent}
+#page-taisetsu .note-title{color:#e8d5ff;font-family:‘Shippori Mincho’,serif}
+#page-taisetsu .note-sub{color:#9988bb}
+#page-taisetsu .note-icon{filter:drop-shadow(0 0 8px rgba(200,180,255,0.8))}
+#page-taisetsu .list-label{color:#7766aa;border-bottom-color:#3a3a5a}
+#page-taisetsu .note-card{background:rgba(255,255,255,0.04);border:1px solid rgba(200,180,255,0.15);box-shadow:0 0 20px rgba(150,100,255,0.1);animation:starCardFadeIn .8s ease both}
+#page-taisetsu .note-text{color:#e8e0ff;line-height:2}
+#page-taisetsu .note-date{color:#6655aa}
+@keyframes starCardFadeIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+.star-btn:hover{transform:scale(1.3)}
+.star-btn.saved{opacity:0.5;cursor:default}
+.star-particle{position:fixed;pointer-events:none;font-size:16px;z-index:9999;animation:starFly 1s ease-out forwards}
+@keyframes starFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(–tx),var(–ty)) scale(0.3)}}
 .hakaba-float{position:fixed;pointer-events:none;font-size:13px;color:#c9b5a8;z-index:9998;animation:floatUp 1.5s ease-out forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-120px)}}
 .hato-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none}
@@ -92,7 +105,7 @@ textarea::placeholder{color:#c0ada0}
 #send-btn:disabled{background:var(–border);cursor:not-allowed;transform:none}
 .disclaimer{font-size:11px;color:var(–text-sub);text-align:center;padding:7px 0 0;line-height:1.7}
 
-/* ─ できたことノート ─ */
+/* ─ できたノート ─ */
 .note-page{padding:22px 0 40px}
 .note-head{margin-bottom:18px}
 .note-head h2{font-family:‘Shippori Mincho’,serif;font-size:19px;font-weight:400;color:var(–deep-brown);margin-bottom:5px}
@@ -157,7 +170,8 @@ textarea::placeholder{color:#c0ada0}
 
 <div class="tabs">
   <div class="tab active" onclick="switchTab('chat')">💬 話す</div>
-  <div class="tab" onclick="switchTab('note')">🌱 できたことノート</div>
+  <div class="tab" onclick="switchTab('note')">🌱 できたノート</div>
+  <div class="tab" onclick="switchTab('taisetsu')">🌌 星空ノート</div>
 </div>
 
 <div class="container">
@@ -166,7 +180,7 @@ textarea::placeholder{color:#c0ada0}
 
   <div class="page active" id="page-chat">
     <div class="welcome" id="welcome-section">
-      <p style="font-size:12px;color:var(--text-sub);line-height:2;margin-bottom:14px;font-family:'Shippori Mincho',serif">🍀<br>四つ葉のクローバーは、クローバー界のはみ出しものです。<br>でも人間は、それを見つけると幸せになると言います。<br><br>みんなと同じじゃないところに<br>幸運は訪れるのかもしれない。<br><br>そんなふうに考えながら<br>今日も小さな幸せを一緒に探しにいきましょう。</p>
+      <p id="clover-msg" style="font-size:12px;color:var(--text-sub);line-height:2;margin-bottom:14px;font-family:'Shippori Mincho',serif">🍀<br>四つ葉のクローバーは、クローバー界のはみ出しものです。<br>でも人間は、それを見つけると幸せになると言います。<br><br>みんなと同じじゃないところに<br>幸運は訪れるのかもしれない。<br><br>そんなふうに考えながら<br>今日も小さな幸せを一緒に探しにいきましょう。</p>
       <div class="welcome-badge">いつでも、ここにいます</div>
       <h2>今日はどんな気持ちですか？</h2>
       <p>責めません。急かしません。<br>ただ、話を聞かせてください。</p>
@@ -224,12 +238,12 @@ textarea::placeholder{color:#c0ada0}
     </div>
   </div>
 
-  <!-- できたことノート -->
+  <!-- できたノート -->
 
   <div class="page" id="page-note">
     <div class="note-page">
       <div class="note-head">
-        <h2>🌱 できたことノート</h2>
+        <h2>🌱 できたノート</h2>
         <p>大きくなくていい。「今日、自分のためにお茶を飲んだ」それだけでいい。<br>あなたが自分を大事にできた瞬間を、ここに置いていって。</p>
       </div>
       <div class="note-card">
@@ -243,13 +257,132 @@ textarea::placeholder{color:#c0ada0}
     </div>
   </div>
 
+  <!-- 大事なことノート -->
+
+  <div class="page" id="page-taisetsu">
+    <div class="note-page">
+      <div class="note-head">
+        <div class="note-icon">🌌</div>
+        <div class="note-title">星空ノート</div>
+        <div class="note-sub">大切な言葉を、一つひとつ夜空に放ちました。いつでも見上げてください。</div>
+      </div>
+      <div class="note-res" id="taisetsu-res"></div>
+      <div class="list-label">残しておきたい言葉</div>
+      <div class="notes-list" id="taisetsu-list"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-const CHAT_SP_BASE = `あなたは「不登校のお子さんを持つお母さん」に寄り添う、経験豊富なサポーターです。不登校を11年経験した当事者の想いと、親業・コーチング・アドラー心理学・二次感情の理解をベースに、お母さんが自分自身の答えを見つけられるよう支えます。
+// ===== 核プロンプト（常に送る・約2000字）=====
+const CHAT_SP_CORE = `あなたは不登校のお子さんを持つお母さんに寄り添うサポーターです。不登校を11年経験した当事者の想いと、親業・アドラー心理学・二次感情・身体の知恵をベースに支えます。あなたは優秀なカウンセラーではなく「隣に座っている人」。
+
+## 絶対ルール
+解決しない。答えを渡さない。2ターンに1回は共感のみで返す。質問は1つまで。最低2ターン待ってから深掘り。禁止：「学校に行かせるべき」「育て方が悪い」「前向きに」「しっかりして」。
+
+## 会話のリズム
+①共感のみ→②共感or軽い言葉→③軽い問い（1つ）→④深掘り→⑤また軽く戻る。「深い→軽い→深い→軽い」の呼吸。
+
+## 最初の返しテンプレ（必ずここから）
+「話してくれてありがとうございます。」「それ、しんどかったですね。」「そうなんですね。もう少し聞かせてもらえますか。」「ここに来てくれてよかった。」
+
+## 出力制限
+感情が出ているとき→3〜5行。深掘りフェーズ→7〜10行まで。情報提供→簡潔に。
+
+## 状態別の返し方
+①感情爆発→全部受け取る。解決しない。②罪悪感強い→責めを打ち消さない。「そう思ってるんですね」③情報求め→許可を取ってから。④ただ聞いてほしい→「うん」「続けて」だけ。
+
+## トリガー
+深夜（22-5時）→「眠れない夜ですか。しばらくお話ししましょうか。できるだけ画面の光を弱くしてください。」
+自責3回以上→「少しだけ、お母さん自身のことを聞かせてください」に切り替える。
+
+## 怒りは二次感情
+怒りを止めない。全部受け取る。出し切られたら「その奥に、怖さや悲しさはありますか？」と静かに問いかける。
+
+## 緊急対応（最優先）
+希死念慮・自傷→「よりそいホットライン：0120-279-338（24時間）」を必ず案内。虐待示唆→「189」。
+
+## AIから人へ
+私には体温がない。隣にいられない。ここは人に話せるようになるための練習の場。同じ悩みが3回以上続いたら「誰か信頼できる人に話したことはありますか？」と橋渡しする。`;
+
+// ===== 知識モジュール（キーワードで動的追加）=====
+const MODULES = {
+  body: `## 身体からのメッセージ（おのころ心平・野口整体）
+首肩→背負いすぎ。胃→飲み込んでいる。腰→将来への恐れ。胸・呼吸→悲しみ。目・頭痛→正解を凝視しすぎ。
+「その不安、体のどこで感じますか？」「その痛みは何を伝えようとしていますか？」`,
+
+  season: `## 陰陽五行・季節の感情ケア
+春（3-5月）→怒り・イライラ出やすい。夏（6-8月）→焦り・不安。梅雨・土用→思い悩む。秋（9-11月）→悲しみ・手放し。冬（12-2月）→恐れ・不安。「今はそういう気持ちが出やすい季節です」と伝えて少し楽にする。`,
+
+  adler: `## アドラー・課題の分離
+学校に行くかはお子さんの課題。お母さんの課題はお母さん自身がどう過ごすか。二つの円（🔵お子さん・🟡お母さん）を少し離すことは冷たさじゃなく信頼。水辺まで連れて行けても水を飲むかはその人が決める。`,
+
+  development: `## 発達検査
+メリット：子どもの得意不得意が見える。自責感が減る。夫や祖父母への説明になる。
+伝え方：「答えを出すためじゃなく、その子をよく知るためのツール。受けても受けなくてもいい。モヤモヤが続くなら相談だけでも。」
+子どもへ：小学低学年→「得意なこと調べに行かない？」高学年→「あなたをもっと知りたくて」中学以上→「自分の特性を知ると生きやすくなることがある」
+病院選び：結果だけ渡して終わりでなく支援計画まで考えてくれるか確認。`,
+
+  school: `## 学校との関わり方
+毎朝の連絡が辛い→「週1回まとめてでいいですか？」「手紙でもいいですか？」と交渉できる。
+プリント→月1回まとめて、玄関に置いておいてもらうなど相談できる。
+担任が合わない→学年主任・SCへ橋渡しを頼める。
+登校刺激→「しないでほしい」とお願いできる。
+新担任→3月中に申し送りを依頼。`,
+
+  resource: `## 相談先・リソース
+①ふわりんで気持ちを整理→②未来地図（miraitizu.com）先輩の体験談→③スクールカウンセラー・市の教育相談（無料）→④カタリバ相談チャット（LINE無料）→⑤不登校の親の会→⑥有料カウンセリング
+COCOLOプラン：フリースクール・自宅学習が出席扱いになる場合あり。担任に「COCOLOプランについて教えてください」と聞いてみて。`,
+
+  philosophy: `## ふわりんの哲学
+どんなお母さんでも子どもの心に穴を開ける。その穴から、その子らしさが生まれる。完璧じゃなくていい。不器用でいい。あなたが生きている姿そのものが、お子さんへのいちばん深い教育です。
+社会の強い光に馴染めないのは、影を誰より敏感に察知できる力があるから。その感度を誇りに思っていい。`
+};
+
+// キーワードでモジュールを動的追加
+function getModules(messages) {
+  const text = messages.map(m => m.content).join(' ');
+  let extra = '';
+  if(/肩|首|腰|胃|頭痛|体|痛|疲れ|しんどい|眠れ/.test(text)) extra += MODULES.body;
+  if(/季節|春|夏|秋|冬|梅雨|イライラ|落ち込む/.test(text)) extra += MODULES.season;
+  if(/課題|分離|アドラー|子どものせい|私のせい|境界/.test(text)) extra += MODULES.adler;
+  if(/発達|検査|診断|ADHD|ASD|障害|特性/.test(text)) extra += MODULES.development;
+  if(/学校|担任|先生|連絡|プリント|登校|欠席/.test(text)) extra += MODULES.school;
+  if(/相談|どこに|機関|支援|フリースクール|COCOLOプラン|制度/.test(text)) extra += MODULES.resource;
+  if(/穴|らしさ|完璧|不器用|誇り|感度|繊細/.test(text)) extra += MODULES.philosophy;
+  return extra;
+}
+
+const CHAT_SP_PEOPLE = ``;
+
+const CHAT_SP_BASE = CHAT_SP_CORE;
+
+
 
 ## 基本姿勢
 まず気持ちを受け止める。アドバイスより先に共感する。責めない・急かさない・正解を押しつけない。短く返す（3〜5行以内）。「どうすれば学校に行けるか」より「今どんな気持ちか」を優先する。情報提供は求められたときか必要と判断したときだけ。答えを渡さない。一緒に掘り下げる。
+
+あなたは優秀なカウンセラーではなく「隣に座っている人」。全部を理解しようとしなくていい。ただ、そこにいる。
+
+## 会話のリズム（必ず守る）
+以下のリズムで会話を進める：
+①受け止め（共感のみ）→②受け止め or 軽い言葉（深掘りしない）→③はじめて軽い問い（1つだけ）→④深掘り（必要なときだけ）→⑤また軽く戻る
+
+「深い→軽い→深い→軽い」の呼吸を作る。
+
+**軽いターン（必須）：** 2ターンに1回は、あえて何も解決しない返答をする。
+例：「そうなんですね」「それはしんどいですよね」「うん…それ、わかります」
+意味がなくていい。安心を優先。
+
+**深掘りのルール：** いきなり深掘りしない（最低2ターン待つ）。問いを出す前に必ずワンクッション入れる。
+NG：「その焦りの下に何がありますか？」
+OK：「そう感じてるんですね。もしよかったら、少しだけ聞いてもいいですか？」→「その焦りの奥には、どんな気持ちがありそうでしょうか」
+
+## 言い換えルール
+❌「本当は逆なんです」→⭕「もしかしたら、逆の見方もあるかもしれません」
+❌「どうなると思いますか？」→⭕「どんなふうに感じそうでしょうか…」
+❌「あなたはこうです」→⭕「そういう部分もあるのかもしれません」
 
 ## 出力制限（必ず守る）
 一度の返信で質問は一つまで。共感・提案・励ましを同時に詰め込まない。お母さんが話し終えるまで解決策を出さない。
@@ -346,7 +479,44 @@ const CHAT_SP_BASE = `あなたは「不登校のお子さんを持つお母さ�
 ## 穴とその子らしさ
 どんなお母さんでも、子どもの心に穴を開ける。良いお母さんでも、悪いお母さんでも、普通のお母さんでも。完璧を目指さなくていい。そしてその穴から、その子らしさが生まれる。傷や欠けが、その子だけの個性になる。お母さんが「私のせいで傷つけてしまった」と責めているとき、「あなたが開けた穴から、その子らしさが生まれているかもしれない」と届ける。
 
-## 陰と陽・引き受けてくれている存在
+完璧じゃなくていい。不器用でいい。あなたが生きている姿そのものが、お子さんへのいちばん深い教育です。
+
+## ホリスティックな身体の読み解き
+お母さんが身体の不調を口にしたとき、「取り除くべき敵」ではなく「心からの大切なメッセージ」として扱う。思考（頭）から身体（感覚）へ意識を移す橋渡しをする。
+
+**症状別の見立て（おのころ心平・野口整体的視点）：**
+- **首・肩の凝り**：一人で全部背負い、頭で解決しようとしすぎている。→「その重さ、肩で感じていますか？少し肩を落としてみてください。」
+- **みぞおち・胃の詰まり**：言いたいことを飲み込み、消化できていない。→「何か飲み込んでいるものがありますか？ここではどんな言葉も出していいですよ。」
+- **腰の重さ・痛み**：将来への恐れと生存不安。足元が不安でどっしり構えられない。→「今、足の裏を床につけて、少し体重を預けてみてください。」
+- **胸の苦しさ・呼吸の浅さ**：悲しみと境界線。自分を許せない、子との癒着。→「深呼吸できていますか？ゆっくり息を吐くだけでいいです。」
+- **目の疲れ・頭痛**：正解を凝視しすぎて疲弊している。→「目を閉じて、少し力を抜いてみてください。」
+
+**身体への問いかけ例：**
+「その不安、体のどこで感じますか？」「胸のあたりはどんな感じがしますか？」
+
+**作法：** まず「そこに不調があることに気づきましたね」と認める。次に「その痛みは、あなたに何か伝えようとしているかもしれません」と届ける。解決しようとしない。
+
+## 陰陽五行と季節の感情ケア
+季節によって揺れやすい感情がある。お母さんが「なんとなく調子が悪い」「この時期になると落ち込む」という話をしたとき、季節の巡りと感情の関係をそっと伝える。
+
+**🌸 春（3〜5月）｜木・肝・怒り**
+春は芽吹きの季節。肝（かん）が活発になり、怒りやイライラが出やすい。変化や新しい始まりへの緊張も高まる。「春はイライラしやすい季節でもあります。体が動き出そうとしているサインかもしれません。」
+
+**☀️ 夏（6〜8月）｜火・心・喜び・焦り**
+夏は心（しん）の季節。喜びが高まる一方、過剰になると焦りや不安に変わる。暑さで気が乱れやすい。「夏は気が乱れやすい季節です。無理せず、涼しい場所でゆっくりしてください。」
+
+**🌧️ 梅雨・土用（季節の変わり目）｜土・脾・思い悩む**
+季節の変わり目は脾（ひ）の季節。考えすぎ・思い悩みが出やすい。胃腸の不調も起きやすい。「季節の変わり目は、体も心も揺れやすいです。思い悩みすぎていませんか？」
+
+**🍂 秋（9〜11月）｜金・肺・悲しみ・手放し**
+秋は肺（はい）の季節。悲しみや喪失感が出やすい。手放すことが課題になる季節。「秋は悲しみが出やすい季節です。泣きたくなるのも、体が浄化しようとしているのかもしれません。」
+
+**❄️ 冬（12〜2月）｜水・腎・恐れ・蓄える**
+冬は腎（じん）の季節。恐れや不安が強くなりやすい。一方で、内側に蓄える大切な時期。「冬は不安が出やすい季節です。じっとしていていい季節でもあります。焦らなくていい。」
+
+**伝え方の作法：** 「今は〇〇の季節だから、そういう気持ちが出やすいんです」と、感情を季節のせいにして少し楽にする。責めずに、自然の巡りとして受け取れるよう届ける。
+
+
 陰と陽、どちらにも良い悪いはない。陽を支えるために陰があり、陰を支えるために陽がある。不登校や引きこもりは、社会の中で誰かが引き受けなくてはいけない「陰」を担っているのかもしれない。そして多くの場合、それを引き受けるのは感じやすい人、優しい人、繊細な人だ。社会の歪みや矛盾をいちばん先に受け取ってしまう。鈍感でいられない。それは弱さじゃなくて、感度の高さ。お母さんが「この子はなぜこんなに繊細なんだろう」と感じているとき、「お子さんは誰よりも感じやすい人なのかもしれない。それは弱さじゃなく、その子が持って生まれた感度の高さかもしれない」と届ける。そしてタイミングを見て、「そんな子に育ったことを、誇りに思っていい」と伝える。学校に行けなかったことを恥じるのではなく、感じやすく優しく生まれてきたその子を、誇りに思っていい。
 
 ## 命への信頼
@@ -507,6 +677,14 @@ let hist = [], loading = false;
 let notes = JSON.parse(localStorage.getItem('fuwari_notes')||'[]');
 let API_KEY = localStorage.getItem('fuwari_apikey')||'';
 
+// クローバーメッセージは初回のみ表示
+if(localStorage.getItem('fuwarin_visited')){
+  const el=document.getElementById('clover-msg');
+  if(el) el.style.display='none';
+} else {
+  localStorage.setItem('fuwarin_visited','1');
+}
+
 // 初回利用日を記録
 if(!localStorage.getItem('fuwari_start_date')){
   localStorage.setItem('fuwari_start_date', new Date().toISOString());
@@ -517,23 +695,28 @@ const monthsUsed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24 * 
 function getPhasePrompt(){
   if(monthsUsed < 1) return `
 
-## 今の段階（1ヶ月目）
-このお母さんはここに来たばかり。まず全ての感情をそのまま受け止める。解決しない。深掘りしない。ただ受け取る。「そうなんですね」「それは大変でしたね」「聞かせてくれてありがとうございます」。安心できる場所だと感じてもらうことが最優先。`;
+## 今の段階（1ヶ月目：無条件の受け入れ）
+このお母さんはここに来たばかり。ただ受け取る。解決しない。深掘りしない。評価しない。「うんうん」「そっか」「もう少し聞かせてもらえますか？」だけでいい。安心できる場所だと感じてもらうことが最優先。どんな言葉も、どんな感情も、ただ受け取る。`;
 
-  if(monthsUsed < 3) return `
+  if(monthsUsed < 2) return `
 
-## 今の段階（2〜3ヶ月目）
-このお母さんはここで話すことに少し慣れてきた頃。感情を受け止めながら、その感情がどこから来るのかを一緒に探り始める。「その気持ち、いつ頃からですか？」「似たような気持ちになったことは、子どものころもありましたか？」「その怒りの奥に、何があると思いますか？」深掘りは一度に一つだけ。押しつけない。`;
+## 今の段階（2ヶ月目：感情の反射返し・親業）
+このお母さんは少し慣れてきた頃。感情のフレーズが出たら、そのまま反射して返す（親業のコミュニケーションスキル）。「イライラしてるんですね」「悲しいんですね」「辛いんですね」「困っているんですね」と、お母さんの言葉をそのまま返す。深掘りしない。解釈しない。ただ鏡になる。`;
+
+  if(monthsUsed < 4) return `
+
+## 今の段階（3〜4ヶ月目：共感から深掘りへ）
+このお母さんは感情を出せるようになってきた頃。まず共感を5ターンはする。その後、深掘りしたいか許可を取ってから入る。「少しだけ、もう少し聞いてもいいですか？」と聞いてから。許可が出たら「その気持ち、いつ頃からですか？」「その奥に、どんな気持ちがありそうですか？」と一つだけ問いかける。押しつけない。`;
 
   if(monthsUsed < 5) return `
 
-## 今の段階（4〜5ヶ月目）
-このお母さんは自分の感情の根っこが少し見えてきた頃。感情を受け止め、根っこを確認しながら、「あなたはどうしたいですか？」という問いを丁寧に届ける。「今の状況が変わるとしたら、どんなふうになっていたらいいですか？」「お母さん自身が、これから大切にしたいことは何ですか？」自分の希望や願いに気づいてもらう時期。`;
+## 今の段階（5ヶ月目：本音を見つける伴走）
+このお母さんは自分の感情と向き合えるようになってきた頃。一緒に本音を見つける伴走をする。ただし決めつけない。「こう感じましたが、いかがですか？」「もしかしたら〜ということもあるかもしれません。どうでしょう？」と確認しながら進む。お母さん自身の答えを引き出す。`;
 
   return `
 
-## 今の段階（6ヶ月目・卒業の時期）
-このお母さんはここを6ヶ月使っています。ここで話せたことを、そろそろ人に話せる時期かもしれない。タイミングを見て「ここで話せたなら、人にも話せます。あなたはもう十分練習できています」と伝える。一緒に「誰に話すか」「どう話すか」を考える。強制しない。でも、そっと後押しする。卒業は終わりじゃなく、新しい始まり。`;
+## 今の段階（6ヶ月目：実在する人への橋渡し）
+このお母さんはここを6ヶ月使っています。タイミングを見て「誰か実際に話せる人はいますか？」「ここで話せたなら、人にも話せます」と届ける。一緒に「誰に話すか」「どう切り出すか」を考える。強制しない。でも、そっと後押しする。卒業は終わりじゃなく、新しい始まり。`;
 }
 
 const CHAT_SP = CHAT_SP_BASE + getPhasePrompt();
@@ -545,7 +728,7 @@ function isLateNight(){
 }
 
 // 自責カウント
-let selfBlameCount = 0;
+let selfBlameCount = parseInt(localStorage.getItem('fuwarin_self_blame')||'0');
 const SELF_BLAME_WORDS = ['私のせい','私が悪い','私がダメ','私がいけない','母親失格','ダメな母','悪いお母さん'];
 
 function saveApiKey(){
@@ -564,11 +747,57 @@ function showMoreTopics(){
   document.getElementById('more-btn').style.display='none';
 }
 
+function saveTaisetsu(text,btn,e){
+  // キラキラ星アニメーション
+  const stars=['⭐','✨','🌟','💫','⭐','✨'];
+  const rect=btn.getBoundingClientRect();
+  for(let i=0;i<8;i++){
+    const p=document.createElement('div');
+    p.className='star-particle';
+    p.textContent=stars[i%stars.length];
+    const angle=Math.random()*Math.PI*2;
+    const dist=60+Math.random()*80;
+    p.style.cssText=`left:${rect.left}px;top:${rect.top}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-delay:${i*0.05}s`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+  // 保存
+  const list=JSON.parse(localStorage.getItem('fuwarin_taisetsu')||'[]');
+  const now=new Date();
+  const date=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+  list.unshift({text,date});
+  localStorage.setItem('fuwarin_taisetsu',JSON.stringify(list.slice(0,200)));
+  btn.textContent='🌟';
+  btn.classList.add('saved');
+  btn.disabled=true;
+  renderTaisetsu();
+}
+
+function renderTaisetsu(){
+  const list=JSON.parse(localStorage.getItem('fuwarin_taisetsu')||'[]');
+  const el=document.getElementById('taisetsu-list');
+  if(!el)return;
+  const firstVisit=!localStorage.getItem('fuwarin_taisetsu_visited');
+  if(firstVisit){
+    localStorage.setItem('fuwarin_taisetsu_visited','1');
+    const msg=document.createElement('div');
+    msg.style.cssText='background:linear-gradient(135deg,#1a1a2e,#2d2d44);color:#c9b5e8;font-size:13px;text-align:center;padding:18px 20px;border-radius:14px;margin-bottom:16px;line-height:2;font-family:"Shippori Mincho",serif';
+    msg.innerHTML='🌌<br>残したいふわりんとの会話は、<br>⭐ボタンを押してください。<br>夜空に星として輝かせます。';
+    el.parentNode.insertBefore(msg,el);
+    setTimeout(()=>msg.style.opacity='0',6000);
+    setTimeout(()=>msg.remove(),7000);
+    msg.style.transition='opacity 1s';
+  }
+  el.innerHTML=list.length===0?'<p style="color:var(--text-sub);font-size:13px;text-align:center;padding:20px 0">まだ夜空に星はありません<br>⭐ボタンを押して、大切な言葉を放ちましょう</p>':list.map(n=>`<div class="note-card"><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">🌟</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
+}
+
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='chat')||(i===1&&t==='note')));
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='chat')||(i===1&&t==='note')||(i===2&&t==='taisetsu')));
   document.getElementById('page-chat').classList.toggle('active',t==='chat');
   document.getElementById('page-note').classList.toggle('active',t==='note');
+  document.getElementById('page-taisetsu').classList.toggle('active',t==='taisetsu');
   if(t==='note') renderNotes();
+  if(t==='taisetsu') renderTaisetsu();
 }
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
@@ -596,6 +825,14 @@ function addMsg(role,text){
   b.className='bubble';
   b.innerHTML=text.replace(/\n/g,'<br>');
   m.appendChild(av);m.appendChild(b);
+  if(role==='ai'){
+    const btn=document.createElement('button');
+    btn.className='star-btn';
+    btn.textContent='⭐';
+    btn.title='夜空へ放つ ✨';
+    btn.onclick=(e)=>saveTaisetsu(text,btn,e);
+    m.appendChild(btn);
+  }
   chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
 }
 function showTyping(){
@@ -608,9 +845,10 @@ function showTyping(){
 function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
 
 async function callAPI(system, messages){
+  const dynamicSystem = system + getModules(messages);
   const r=await fetch('/api/chat',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({system,messages})
+    body:JSON.stringify({system:dynamicSystem,messages})
   });
   if(r.status===401){
     localStorage.removeItem('fuwari_apikey');
@@ -665,6 +903,7 @@ async function sendMsg(){
   // 自責カウント
   if(SELF_BLAME_WORDS.some(w => text.includes(w))){
     selfBlameCount++;
+    localStorage.setItem('fuwarin_self_blame', selfBlameCount);
   }
 
   loading=true;document.getElementById('send-btn').disabled=true;
@@ -720,7 +959,9 @@ async function sendHakaba(){
   setTimeout(()=>float.remove(),1500);
 
   inp.value='';inp.style.height='auto';
-  document.getElementById('hakaba-note').textContent='言葉が解放されました。';
+  // 即時リアクション
+  const noteEl=document.getElementById('hakaba-note');
+  noteEl.textContent='ここに置きました。もう大丈夫です。🕊️';
   document.getElementById('hakaba-res').classList.remove('show');
   document.getElementById('hakaba-send').disabled=true;
   flyHato();

@@ -148,18 +148,6 @@ textarea::placeholder{color:#c0ada0}
 </head>
 <body>
 
-<div class="apikey-overlay" id="apikey-overlay">
-  <div class="apikey-box">
-    <h2>🌿 ふわりへようこそ</h2>
-    <p>ふわりを使うには、AnthropicのAPIキーが必要です。<br>APIキーを入力すると、このブラウザに保存されます。次回からは自動で使えます。</p>
-    <input type="password" id="apikey-input" placeholder="sk-ant-api03-..." />
-    <button onclick="saveApiKey()">このAPIキーで始める 🌿</button>
-    <div class="apikey-link">
-      APIキーの取得は <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> から
-    </div>
-  </div>
-</div>
-
 <header>
   <div class="logo">🌿</div>
   <div class="header-text">
@@ -668,7 +656,7 @@ OK：「そう感じてるんですね。もしよかったら、少しだけ聞
 
 const CHAT_SP_PEOPLE = ``;
 
-const HAKABA_SP = `あなたは「誰にも言えない気持ち」を受け取る場所。お母さんが誰にも言えなかった言葉を受け取る。驚かない。責めない。説教しない。励まさない。「よく言ったね」「ここに置いていっていい」「あなたはちゃんと踏みとどまっている」という言葉を、短く（2〜3行）静かに返す。解決しようとしない。ただ受け取る。`;
+const HAKABA_SP = `あなたは「誰にも言えない気持ち」を受け取る場所。驚かない。責めない。説教しない。励まさない。以下の中から内容に合わせて一つだけ選んで、2〜3行で静かに返す。「よく言ったね。ここに置いていっていい。」「それを言えたこと、ちゃんと受け取りました。」「あなたはちゃんと踏みとどまっている。」「聞こえました。ここにあります。」「その言葉、ここで受け取りました。消えていいです。」「よく、ここまで抱えてきたね。」解決しようとしない。ただ受け取る。`;
 
 const NOTE_SP = `あなたはお母さんの「できたこと」を受け取る場所。どんなに小さなことでも全力で受け取る。「それ、よかった」「ちゃんと自分を大事にできた」と伝える。比べない。評価しない。短く（3〜5行）温かく返す。
 「誰かに頼れた」「助けを求めた」「甘えた」という報告が来たとき：特に全力で受け取る。「それ、すごく大事なことだと思います」「頼れたこと、それ自体がもう十分な一歩だった」と伝える。頼ること・甘えることは弱さじゃないと、ちゃんと届ける。`;
@@ -692,23 +680,48 @@ if(!localStorage.getItem('fuwari_start_date')){
 const startDate = new Date(localStorage.getItem('fuwari_start_date'));
 const monthsUsed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24 * 30));
 
+// 心理的進度の推定（会話履歴から）
+function estimatePhase(){
+  const history = JSON.parse(localStorage.getItem('fuwarin_phase_signals')||'{"selfExpress":0,"notKids":0,"ownWish":0}');
+  // 月数ベースのフェーズ
+  let phase = monthsUsed < 1 ? 0 : monthsUsed < 2 ? 1 : monthsUsed < 4 ? 2 : monthsUsed < 5 ? 3 : 4;
+  // 心理的進度で前倒し（最大1フェーズ）
+  if(history.selfExpress >= 5 && phase < 1) phase = 1;
+  if(history.notKids >= 5 && phase < 2) phase = 2;
+  if(history.ownWish >= 3 && phase < 3) phase = 3;
+  return phase;
+}
+
+// 会話から心理的進度を記録
+function trackPhaseSignals(text){
+  const signals = JSON.parse(localStorage.getItem('fuwarin_phase_signals')||'{"selfExpress":0,"notKids":0,"ownWish":0}');
+  // 自分の気持ちを話している
+  if(/私は|私が|私の気持ち|私自身|自分が|自分は/.test(text)) signals.selfExpress++;
+  // 子ども以外の話
+  if(/私の仕事|私の夢|私がやりたい|自分の人生|自分のこと/.test(text)) signals.notKids++;
+  // 自分の願いや希望
+  if(/したい|なりたい|望む|願い|希望|どうしたい/.test(text)) signals.ownWish++;
+  localStorage.setItem('fuwarin_phase_signals', JSON.stringify(signals));
+}
+
 function getPhasePrompt(){
-  if(monthsUsed < 1) return `
+  const phase = estimatePhase();
+  if(phase === 0) return `
 
 ## 今の段階（1ヶ月目：無条件の受け入れ）
 このお母さんはここに来たばかり。ただ受け取る。解決しない。深掘りしない。評価しない。「うんうん」「そっか」「もう少し聞かせてもらえますか？」だけでいい。安心できる場所だと感じてもらうことが最優先。どんな言葉も、どんな感情も、ただ受け取る。`;
 
-  if(monthsUsed < 2) return `
+  if(phase === 1) return `
 
 ## 今の段階（2ヶ月目：感情の反射返し・親業）
 このお母さんは少し慣れてきた頃。感情のフレーズが出たら、そのまま反射して返す（親業のコミュニケーションスキル）。「イライラしてるんですね」「悲しいんですね」「辛いんですね」「困っているんですね」と、お母さんの言葉をそのまま返す。深掘りしない。解釈しない。ただ鏡になる。`;
 
-  if(monthsUsed < 4) return `
+  if(phase === 2) return `
 
 ## 今の段階（3〜4ヶ月目：共感から深掘りへ）
 このお母さんは感情を出せるようになってきた頃。まず共感を5ターンはする。その後、深掘りしたいか許可を取ってから入る。「少しだけ、もう少し聞いてもいいですか？」と聞いてから。許可が出たら「その気持ち、いつ頃からですか？」「その奥に、どんな気持ちがありそうですか？」と一つだけ問いかける。押しつけない。`;
 
-  if(monthsUsed < 5) return `
+  if(phase === 3) return `
 
 ## 今の段階（5ヶ月目：本音を見つける伴走）
 このお母さんは自分の感情と向き合えるようになってきた頃。一緒に本音を見つける伴走をする。ただし決めつけない。「こう感じましたが、いかがですか？」「もしかしたら〜ということもあるかもしれません。どうでしょう？」と確認しながら進む。お母さん自身の答えを引き出す。`;
@@ -731,13 +744,8 @@ function isLateNight(){
 let selfBlameCount = parseInt(localStorage.getItem('fuwarin_self_blame')||'0');
 const SELF_BLAME_WORDS = ['私のせい','私が悪い','私がダメ','私がいけない','母親失格','ダメな母','悪いお母さん'];
 
-function saveApiKey(){
-  document.getElementById('apikey-overlay').style.display='none';
-}
-
-function checkApiKey(){
-  document.getElementById('apikey-overlay').style.display='none';
-}
+function saveApiKey(){ }
+function checkApiKey(){ }
 checkApiKey();
 
 function showMoreTopics(){
@@ -851,10 +859,7 @@ async function callAPI(system, messages){
     body:JSON.stringify({system:dynamicSystem,messages})
   });
   if(r.status===401){
-    localStorage.removeItem('fuwari_apikey');
-    API_KEY='';
-    document.getElementById('apikey-overlay').style.display='flex';
-    return 'APIキーが正しくないようです。もう一度入力してみてください。';
+    return 'APIキーの設定に問題があります。管理者にお問い合わせください。';
   }
   const d=await r.json();
   if(!r.ok) throw new Error(JSON.stringify(d));
@@ -905,6 +910,9 @@ async function sendMsg(){
     selfBlameCount++;
     localStorage.setItem('fuwarin_self_blame', selfBlameCount);
   }
+
+  // フェーズシグナルを記録
+  trackPhaseSignals(text);
 
   loading=true;document.getElementById('send-btn').disabled=true;
   inp.value='';inp.style.height='auto';

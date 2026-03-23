@@ -342,6 +342,7 @@ function getModules(messages) {
   return extra;
 }
 
+const CHAT_SP_BASE = CHAT_SP_CORE;
 const CHAT_SP_PEOPLE = ``;
 
 const HAKABA_SP = `あなたは「誰にも言えない気持ち」を受け取る場所。驚かない。責めない。説教しない。励まさない。以下の中から内容に合わせて一つだけ選んで、2〜3行で静かに返す。「よく言ったね。ここに置いていっていい。」「それを言えたこと、ちゃんと受け取りました。」「あなたはちゃんと踏みとどまっている。」「聞こえました。ここにあります。」「その言葉、ここで受け取りました。消えていいです。」「よく、ここまで抱えてきたね。」解決しようとしない。ただ受け取る。`;
@@ -495,6 +496,9 @@ function switchTab(t){
   if(t==='note') renderNotes();
   if(t==='taisetsu') renderTaisetsu();
 }
+const EMERGENCY_KEYWORDS = ['死にたい','しにたい','消えたい','死ね','しね','自殺','首吊り','飛び降り','死んでしまいたい','消えてしまいたい','もう終わりにしたい','殺したい','ころしたい'];
+let emergencyCount = 0;
+
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
 function hkKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendHakaba()}}
@@ -554,8 +558,6 @@ async function callAPI(system, messages){
   return d.content?.[0]?.text||'';
 }
 
-const EMERGENCY_KEYWORDS = ['死にたい','しにたい','消えたい','死ね','しね','自殺','首吊り','飛び降り','死んでしまいたい','消えてしまいたい','もう終わりにしたい','殺したい','ころしたい'];
-let emergencyCount = 0;
 
 function checkEmergency(text){
   return EMERGENCY_KEYWORDS.some(kw => text.includes(kw));

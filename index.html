@@ -705,8 +705,17 @@ async function sendMsg(){
   inp.value='';inp.style.height='auto';
   addMsg('user',text);hist.push({role:'user',content:text});
 
+  const lateNightMessages = [
+    '眠れない夜ですか。\nしばらくお話ししましょうか。\nできるだけ画面の光を弱くしてください。🌙',
+    'よく来てくれましたね。\nこんな夜に、ここを開いてくれた。\nゆっくり話しましょう。🌙',
+    '私もあなたがどうしてるか気になっていたところです。\nよかった、来てくれて。🌙',
+    '私も眠れませんでした。\nよかったら、お話しませんか？🌙',
+    '夜ですね。\n体は大丈夫ですか。\nここにいますよ。🌙',
+    '静かな夜ですね。\nここに来てくれてよかった。🌙',
+    '少し深呼吸してから、お話をしてくださいね。🌙',
+  ];
   const lateNightPrefix = (isLateNight() && hist.length === 1)
-    ? '眠れない夜ですか。\nしばらくお話ししましょうか。\nできるだけ画面の光を弱くしてください。🌙\n\n'
+    ? lateNightMessages[Math.floor(Math.random()*lateNightMessages.length)] + '\n\n'
     : '';
 
   showTyping();

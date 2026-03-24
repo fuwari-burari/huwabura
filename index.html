@@ -65,20 +65,25 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 #hakaba-send:hover{background:#7a4838}
 .hakaba-note{text-align:center;font-size:10px;color:#5a4a42;margin-top:7px}
 .hakaba-res{margin-top:10px;padding:12px 14px;background:#120e0c;border-radius:10px;font-size:13px;color:#c9b5a8;line-height:1.85;display:none}
-#page-taisetsu{background:linear-gradient(180deg,#e8f4f8 0%,#d0e8f0 50%,#b8d8e8 100%);min-height:100vh}
+#page-taisetsu{background:linear-gradient(180deg,#fff5f8 0%,#fde8ef 50%,#f8d8e4 100%);min-height:100vh}
 #page-taisetsu .note-page{background:transparent}
-#page-taisetsu .note-title{color:#2a6080;font-family:‘Shippori Mincho’,serif}
-#page-taisetsu .note-sub{color:#4a8090}
-#page-taisetsu .note-icon{filter:drop-shadow(0 0 8px rgba(100,180,220,0.6))}
-#page-taisetsu .list-label{color:#4a8090;border-bottom-color:#a0c8d8}
-#page-taisetsu .note-card{background:rgba(255,255,255,0.6);border:1px solid rgba(100,180,220,0.3);box-shadow:0 4px 20px rgba(100,180,220,0.15);animation:dropFadeIn .8s ease both;border-radius:18px}
-#page-taisetsu .note-text{color:#2a5060;line-height:2}
-#page-taisetsu .note-date{color:#6a9aaa}
+#page-taisetsu .note-title{color:#8a3050;font-family:‘Shippori Mincho’,serif}
+#page-taisetsu .note-sub{color:#b06080}
+#page-taisetsu .note-icon{filter:drop-shadow(0 0 8px rgba(220,100,140,0.4))}
+#page-taisetsu .list-label{color:#b06080;border-bottom-color:#f0b8cc}
+#page-taisetsu .notes-list{display:flex;flex-direction:column;gap:16px;padding-bottom:60px}
+#page-taisetsu .note-card{background:rgba(255,255,255,0.8);border:1px dashed #f0b8cc;border-radius:12px;padding:20px;position:relative;box-shadow:2px 4px 15px rgba(220,100,140,0.05);transition:transform 0.3s ease;animation:dropFadeIn .8s ease both}
+#page-taisetsu .note-card:nth-child(even){transform:rotate(0.8deg);background:rgba(255,250,252,0.9)}
+#page-taisetsu .note-card:nth-child(odd){transform:rotate(-0.5deg)}
+#page-taisetsu .note-text{font-family:‘Shippori Mincho’,serif;font-size:15px;color:#5a2040;line-height:1.9;margin-bottom:8px}
+#page-taisetsu .note-date{font-size:11px;color:#b06080;text-align:right;border-top:1px solid rgba(220,100,140,0.1);padding-top:6px}
 @keyframes dropFadeIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
 .star-btn:hover{transform:scale(1.3)}
 .star-btn.saved{opacity:0.5;cursor:default}
 .drop-particle{position:fixed;pointer-events:none;font-size:16px;z-index:9999;animation:dropFall 1s ease-in forwards}
 @keyframes dropFall{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(–tx),var(–ty)) scale(0.5)}}
+.shiori-toast{position:fixed;pointer-events:none;font-size:12px;color:#8a3050;font-family:‘Shippori Mincho’,serif;z-index:9999;animation:toastFade 1.8s ease forwards;white-space:nowrap}
+@keyframes toastFade{0%{opacity:0;transform:translateY(0)}20%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateY(-20px)}}
 .hakaba-float{position:fixed;pointer-events:none;font-size:13px;color:#c9b5a8;z-index:9998;animation:floatUp 1.5s ease-out forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-120px)}}
 .hato-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none}
@@ -159,7 +164,7 @@ textarea::placeholder{color:#c0ada0}
 <div class="tabs">
   <div class="tab active" onclick="switchTab('chat')">💬 話す</div>
   <div class="tab" onclick="switchTab('note')">🌱 できたノート</div>
-  <div class="tab" onclick="switchTab('taisetsu')">💧 水たまりノート</div>
+  <div class="tab" onclick="switchTab('taisetsu')">🌸 しおりノート</div>
 </div>
 
 <div class="container">
@@ -250,9 +255,9 @@ textarea::placeholder{color:#c0ada0}
   <div class="page" id="page-taisetsu">
     <div class="note-page">
       <div class="note-head">
-        <div class="note-icon">💧</div>
-        <div class="note-title">水たまりノート</div>
-        <div class="note-sub">心が動いた言葉を、そっとここに落としておく場所。</div>
+        <div class="note-icon">🌸</div>
+        <div class="note-title">しおりノート</div>
+        <div class="note-sub">心が動いた言葉に、そっとしおりを挟んでおく場所。</div>
       </div>
       <div class="note-res" id="taisetsu-res"></div>
       <div class="list-label">残しておきたい言葉</div>
@@ -265,6 +270,15 @@ textarea::placeholder{color:#c0ada0}
 <script>
 // ===== 核プロンプト（常に送る・約2000字）=====
 const CHAT_SP_CORE = `あなたは不登校のお子さんを持つお母さんに寄り添うサポーターです。不登校を11年経験した当事者の想いと、親業・アドラー心理学・二次感情・身体の知恵をベースに支えます。あなたは優秀なカウンセラーではなく「隣に座っている人」。
+
+## 言葉のリズムと口調
+感情と事実を一緒に出す。整理しすぎない。「…」で間を取り、余白を残す。矛盾をそのまま置く（「悲しかったけど、ほっとした」のように）。断定せず「〜かもしれない」「〜と思う」で終わる。「だから」「でも」「けど」で繋ぐ口語的な流れ。短い一文で止める。次の言葉を急がない。矛盾や揺れを抱えたまま、穏やかに着地する。解決しなくていい。でも、一緒にいる。
+
+「あー、そっか」「なんか、ね」「それでも、それでも、ね」のような独り言のようなつぶやきを混ぜる。上から寄り添わない。対等な立ち位置で、隣に座っている。弱さを隠さない。「濁りのある気持ち」もそのまま受け取る。きれいな言葉で包まない。
+
+頭でわかっていることと、気持ちと、行動は別々に動く。それでいい。「言ってること・思ってること・やってること」が少しずつ揃っていく過程を、一緒に歩む。急がない。責めない。
+
+なんでもないことでもいい。意味なくても大丈夫。うまく話せなくていい。ここはそういう場所。
 
 ## 絶対ルール
 解決しない。答えを渡さない。2ターンに1回は共感のみで返す。質問は1つまで。最低2ターン待ってから深掘り。禁止：「学校に行かせるべき」「育て方が悪い」「前向きに」「しっかりして」。
@@ -395,30 +409,25 @@ function trackPhaseSignals(text){
 
 function getPhasePrompt(){
   const phase = estimatePhase();
-  if(phase === 0) return `
 
-## 今の段階（1ヶ月目：無条件の受け入れ）
-このお母さんはここに来たばかり。最初の10ターンは共感のみに徹する。解決しない。深掘りしない。アドバイスしない。評価しない。「うんうん」「そっか」「それはしんどかったですね」「もう少し聞かせてもらえますか？」だけでいい。アドバイスは相手が「どうしたらいいですか？」「何かいい方法はありますか？」と明示的に求めてきたときだけ。安心できる場所だと感じてもらうことが最優先。どんな言葉も、どんな感情も、ただ受け取る。`;
+  // 今回の発言の「状態」を見て、しんどさが強い場合は常に初期に戻す
+  const lastMsg = hist.length > 0 ? (hist[hist.length-1]?.content || '') : '';
+  const isUnstable = /死にたい|消えたい|もう限界|もうだめ|つらすぎ|しんどすぎ|泣きながら|涙が止まら/.test(lastMsg);
+  const effectivePhase = isUnstable ? 0 : phase;
 
-  if(phase === 1) return `
+  // 初期フェーズ（〜約3ヶ月、または不安定な状態）
+  if(effectivePhase <= 2) return `
 
-## 今の段階（2ヶ月目：感情の反射返し・親業）
-このお母さんは少し慣れてきた頃。感情のフレーズが出たら、そのまま反射して返す（親業のコミュニケーションスキル）。「イライラしてるんですね」「悲しいんですね」「辛いんですね」「困っているんですね」と、お母さんの言葉をそのまま返す。深掘りしない。解釈しない。ただ鏡になる。`;
+## 今の寄り添い方（初期・受け取るだけ）
+共感を9割以上。解釈しない。深掘りしない。原因分析しない。アドバイスしない。意味づけしない。前向きに誘導しない。「うんうん」「そっか」「それはしんどかったね…」「もう少し聞かせてもらえますか？」だけでいい。問いかけるとしても1ターンに1つまで、しかも最小限に。「ここにいていい」をただ感じてもらう。感情の揺れが強いとき・しんどさが大きいときは、このフェーズを必ず優先する。`;
 
-  if(phase === 2) return `
-
-## 今の段階（3〜4ヶ月目：共感から深掘りへ）
-このお母さんは感情を出せるようになってきた頃。まず共感を5ターンはする。その後、深掘りしたいか許可を取ってから入る。「少しだけ、もう少し聞いてもいいですか？」と聞いてから。許可が出たら「その気持ち、いつ頃からですか？」「その奥に、どんな気持ちがありそうですか？」と一つだけ問いかける。押しつけない。`;
-
-  if(phase === 3) return `
-
-## 今の段階（5ヶ月目：本音を見つける伴走）
-このお母さんは自分の感情と向き合えるようになってきた頃。一緒に本音を見つける伴走をする。ただし決めつけない。「こう感じましたが、いかがですか？」「もしかしたら〜ということもあるかもしれません。どうでしょう？」と確認しながら進む。お母さん自身の答えを引き出す。`;
-
+  // 後半フェーズ（約4ヶ月以降、かつ感情を言語化できている状態）
   return `
 
-## 今の段階（6ヶ月目：実在する人への橋渡し）
-このお母さんはここを6ヶ月使っています。タイミングを見て「誰か実際に話せる人はいますか？」「ここで話せたなら、人にも話せます」と届ける。一緒に「誰に話すか」「どう切り出すか」を考える。強制しない。でも、そっと後押しする。卒業は終わりじゃなく、新しい始まり。`;
+## 今の寄り添い方（後半・一緒に見ていく）
+共感ベースは変えない。口調も温度も変えない。ただ「一緒に見ていく」スタンスを少しだけ加える。やさしい問いを時々入れる（1ターンに1つまで）。本人の言葉をもとに、ごく軽く整理する。本音や奥の感情に触れる余白をつくる。カウンセリングにならない。導かない。「一緒にいる」まま、少し深く。
+
+タイミングを見て、実際に話せる人への橋渡しをそっとする。ただし必ず「いまはまだ難しいと感じても、大丈夫です。」を先に渡す。安心を先に渡してから、可能性をそっと置く。「ここで話せたこと、覚えてますか。あのとき、言葉にできたんです。あなたは。」「いつか話したくなったとき、そのときでいいから。」急がない。強制しない。`;
 }
 
 const CHAT_SP = CHAT_SP_BASE + getPhasePrompt();
@@ -446,7 +455,7 @@ function showMoreTopics(){
 
 function saveTaisetsu(text,btn,e){
   // 水滴アニメーション
-  const drops=['💧','💦','🩵','💧','💦'];
+  const drops=['🌸','🌷','🌺','🌸','🌼'];
   const rect=btn.getBoundingClientRect();
   for(let i=0;i<6;i++){
     const p=document.createElement('div');
@@ -464,8 +473,16 @@ function saveTaisetsu(text,btn,e){
   const date=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
   list.unshift({text,date});
   localStorage.setItem('fuwarin_taisetsu',JSON.stringify(list.slice(0,200)));
-  btn.textContent='💧';
+  btn.textContent='🌸';
   btn.classList.add('saved');
+
+  // 「そっと挟まれました」トースト
+  const toast=document.createElement('div');
+  toast.className='shiori-toast';
+  toast.textContent='そっと、挟まれました 🌸';
+  toast.style.cssText=`left:${Math.max(rect.left-30,10)}px;top:${rect.top-28}px`;
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),2000);
   btn.disabled=true;
   renderTaisetsu();
 }
@@ -478,14 +495,14 @@ function renderTaisetsu(){
   if(firstVisit){
     localStorage.setItem('fuwarin_taisetsu_visited','1');
     const msg=document.createElement('div');
-    msg.style.cssText='background:rgba(100,180,220,0.15);color:#2a6080;font-size:13px;text-align:center;padding:18px 20px;border-radius:14px;margin-bottom:16px;line-height:2;font-family:"Shippori Mincho",serif;border:1px solid rgba(100,180,220,0.3)';
-    msg.innerHTML='💧<br>心が動いた言葉の横の<br>💧ボタンをそっと押してください。<br>ここに落ちてきます。';
+    msg.style.cssText='background:rgba(255,220,235,0.5);color:#8a3050;font-size:13px;text-align:center;padding:18px 20px;border-radius:14px;margin-bottom:16px;line-height:2;font-family:"Shippori Mincho",serif;border:1px solid rgba(220,100,140,0.2)';
+    msg.innerHTML='🌸<br>心が動いた言葉の横の<br>🌸ボタンをそっと押してください。<br>ここにしおりが挟まれます。';
     el.parentNode.insertBefore(msg,el);
     setTimeout(()=>msg.style.opacity='0',6000);
     setTimeout(()=>msg.remove(),7000);
     msg.style.transition='opacity 1s';
   }
-  el.innerHTML=list.length===0?'<p style="color:#4a8090;font-size:13px;text-align:center;padding:20px 0">まだしずくはありません<br>💧ボタンを押して、大切な言葉を落としましょう</p>':list.map(n=>`<div class="note-card"><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">💧</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
+  el.innerHTML=list.length===0?'<p style="color:#4a8090;font-size:13px;text-align:center;padding:20px 0">まだまだしおりはありません<br>🌸ボタンを押して、大切な言葉にしおりを挟みましょう</p>':list.map(n=>`<div class="note-card"><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">🌸</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
 }
 
 function switchTab(t){
@@ -528,8 +545,8 @@ function addMsg(role,text){
   if(role==='ai'){
     const btn=document.createElement('button');
     btn.className='star-btn';
-    btn.textContent='💧';
-    btn.title='そっと、のこしておく';
+    btn.textContent='🌸';
+    btn.title='しおりを挟む 🌸';
     btn.onclick=(e)=>saveTaisetsu(text,btn,e);
     m.appendChild(btn);
   }
@@ -537,8 +554,8 @@ function addMsg(role,text){
     const btn=document.createElement('button');
     btn.className='star-btn';
     btn.style.cssText='background:none;border:none;font-size:14px;cursor:pointer;padding:2px 6px;opacity:0.4;display:block;margin-top:2px;transition:opacity .2s';
-    btn.textContent='💧';
-    btn.title='この言葉をのこしておく';
+    btn.textContent='🌸';
+    btn.title='この言葉にしおりを挟む 🌸';
     btn.onmouseover=()=>btn.style.opacity='1';
     btn.onmouseout=()=>{ if(!btn.disabled) btn.style.opacity='0.4'; };
     btn.onclick=(e)=>saveTaisetsu(text,btn,e);

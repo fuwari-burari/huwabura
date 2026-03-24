@@ -159,12 +159,22 @@ textarea::placeholder{color:#c0ada0}
     <h1>ふわりん</h1>
     <p>不登校のお母さんに寄り添うAI</p>
   </div>
+  <button onclick="enterSimMode()" style="margin-left:auto;background:none;border:1px dashed #8aab8a;color:#8aab8a;border-radius:12px;padding:4px 10px;font-size:11px;cursor:pointer;flex-shrink:0">🧪 試運転</button>
 </header>
 
 <div class="tabs">
   <div class="tab active" onclick="switchTab('chat')">💬 話す</div>
   <div class="tab" onclick="switchTab('note')">🌱 できたノート</div>
   <div class="tab" onclick="switchTab('taisetsu')">✨ しおりノート</div>
+</div>
+
+<!-- 試運転モードパネル -->
+<div id="sim-panel" style="display:none;width:100%;max-width:720px;background:#f0f4f0;border-bottom:1px solid #d0ddd0;padding:8px 16px;font-size:12px;color:#5a7a5a;text-align:center">
+  <span style="margin-right:8px">🧪 試運転モード：</span>
+  <span id="sim-label" style="font-weight:500;margin-right:12px"></span>
+  <span style="margin-right:4px">日目を選択：</span>
+  <span id="sim-days" style="display:inline-flex;gap:4px"></span>
+  <button onclick="exitSimMode()" style="margin-left:12px;background:none;border:1px solid #8aab8a;color:#5a7a5a;border-radius:10px;padding:2px 8px;font-size:11px;cursor:pointer">終了</button>
 </div>
 
 <div class="container">
@@ -383,11 +393,45 @@ if(!localStorage.getItem('fuwari_start_date')){
 const startDate = new Date(localStorage.getItem('fuwari_start_date'));
 const monthsUsed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24 * 30));
 
+// 試運転モード（1〜6日目 → 0〜5ヶ月に換算）
+const SIM_DAY_LABELS = ['1日目（1ヶ月目）','2日目（2ヶ月目）','3日目（3ヶ月目）','4日目（4ヶ月目）','5日目（5ヶ月目）','6日目（6ヶ月目）'];
+function getSimDay(){ return parseInt(localStorage.getItem('fuwarin_sim_day')||'0'); }
+function setSimDay(day){
+  localStorage.setItem('fuwarin_sim_day', day);
+  document.getElementById('sim-label').textContent = SIM_DAY_LABELS[day-1];
+  document.querySelectorAll('.sim-day-btn').forEach((b,i)=>{
+    b.style.background = (i+1===day) ? '#8aab8a' : '#fff';
+    b.style.color = (i+1===day) ? '#fff' : '#5a7a5a';
+  });
+}
+function enterSimMode(){
+  const panel = document.getElementById('sim-panel');
+  panel.style.display='block';
+  const container = document.getElementById('sim-days');
+  container.innerHTML='';
+  for(let i=1;i<=6;i++){
+    const b=document.createElement('button');
+    b.className='sim-day-btn';
+    b.textContent=i+'日';
+    b.style.cssText='border:1px solid #8aab8a;border-radius:10px;padding:2px 8px;font-size:11px;cursor:pointer;background:#fff;color:#5a7a5a;transition:all .2s';
+    b.onclick=()=>setSimDay(i);
+    container.appendChild(b);
+  }
+  setSimDay(getSimDay()||1);
+}
+function exitSimMode(){
+  localStorage.removeItem('fuwarin_sim_day');
+  document.getElementById('sim-panel').style.display='none';
+}
+
 // 心理的進度の推定（会話履歴から）
 function estimatePhase(){
   const history = JSON.parse(localStorage.getItem('fuwarin_phase_signals')||'{"selfExpress":0,"notKids":0,"ownWish":0}');
+  // 試運転モードでは日数を月数として使用
+  const simDay = getSimDay();
+  const effectiveMonths = simDay > 0 ? simDay - 1 : monthsUsed;
   // 月数ベースのフェーズ
-  let phase = monthsUsed < 1 ? 0 : monthsUsed < 2 ? 1 : monthsUsed < 4 ? 2 : monthsUsed < 5 ? 3 : 4;
+  let phase = effectiveMonths < 1 ? 0 : effectiveMonths < 2 ? 1 : effectiveMonths < 4 ? 2 : effectiveMonths < 5 ? 3 : 4;
   // 心理的進度で前倒し（最大1フェーズ）
   if(history.selfExpress >= 5 && phase < 1) phase = 1;
   if(history.notKids >= 5 && phase < 2) phase = 2;

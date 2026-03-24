@@ -680,17 +680,14 @@ async function sendMsg(){
   inp.value='';inp.style.height='auto';
   addMsg('user',text);hist.push({role:'user',content:text});
 
-  // 深夜の最初のメッセージ
-  if(isLateNight() && hist.length === 1){
-    setTimeout(()=>{
-      addMsg('ai','眠れない夜ですか。\nしばらくお話ししましょうか。\nできるだけ画面の光を弱くしてください。🌙');
-    }, 500);
-  }
+  const lateNightPrefix = (isLateNight() && hist.length === 1)
+    ? '眠れない夜ですか。\nしばらくお話ししましょうか。\nできるだけ画面の光を弱くしてください。🌙\n\n'
+    : '';
 
   showTyping();
   try{
     const reply=await callAPI(CHAT_SP_BASE + getPhasePrompt(),hist);
-    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',reply);
+    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',lateNightPrefix+reply);
   }catch(e){rmTyping();console.error('API Error:',e);addMsg('ai','少し接続が不安定なようです。もう一度話しかけてみてください。')}
   loading=false;document.getElementById('send-btn').disabled=false;
 }

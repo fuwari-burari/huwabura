@@ -100,7 +100,7 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .hato{position:absolute;font-size:28px;animation:hatoFly 2.2s ease-in forwards}
 @keyframes hatoFly{0%{opacity:0;transform:scale(0.5) translateY(0)}20%{opacity:1;transform:scale(1) translateY(-30px)}80%{opacity:0.7;transform:scale(1.1) translateY(-350px) translateX(var(--dx))}100%{opacity:0;transform:scale(0.8) translateY(-600px) translateX(var(--dx2))}}
 
-.input-area{padding:12px 0 22px;border-top:1px solid var(–border);background:var(–cream);position:sticky;bottom:0}
+.input-area{padding:12px 4px 22px;border-top:1px solid var(--border);background:var(--cream);position:sticky;bottom:0}
 .input-wrap{display:flex;gap:10px;align-items:flex-end;background:var(--warm-white);border:2px solid #b09a88;border-radius:22px;padding:9px 9px 9px 15px;transition:border-color .2s;box-shadow:0 2px 12px var(--shadow)}
 .input-wrap:focus-within{border-color:#5a3e2a;border-width:2px;box-shadow:0 2px 16px rgba(90,62,42,0.15)}
 textarea{flex:1;border:none;outline:none;background:transparent;font-family:‘Zen Kaku Gothic New’,sans-serif;font-size:14px;color:var(–text-main);resize:none;max-height:120px;line-height:1.7}
@@ -218,7 +218,25 @@ textarea::placeholder{color:#c0ada0}
         <button class="emergency-close" onclick="closeEmergency()">ここに戻る</button>
       </div>
     </div>
+    <div id="topics-popup" style="display:none;background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 12px var(--shadow)">
+      <div style="font-size:11px;color:var(--text-sub);margin-bottom:8px;letter-spacing:.1em">話題を選ぶ</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない');closeTopicsPopup()">😔 どうしたらいいかわからない</button>
+        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて、一日中ゲームばかりしています。どうしたらいいですか');closeTopicsPopup()">🌙 昼夜逆転・ゲームが心配</button>
+        <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です');closeTopicsPopup()">📚 学習の遅れが気になる</button>
+        <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう');closeTopicsPopup()">💔 自分を責めてしまう</button>
+        <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です');closeTopicsPopup()">👫 パートナーに理解されない</button>
+        <button class="topic-chip" onclick="st('学校の先生に相談したいけど、誰に話せばいいかわからない');closeTopicsPopup()">🏫 誰に相談すればいい？</button>
+        <button class="topic-chip" onclick="st('仕事をどうするか、お金のことも不安です');closeTopicsPopup()">💼 仕事・お金のこと</button>
+        <button class="topic-chip" onclick="st('子どもを病院に連れて行きたいけど、どこに行けばいいかわからない');closeTopicsPopup()">🏥 病院の選び方</button>
+        <button class="topic-chip" onclick="st('子どもに対して、きれいじゃない感情がある。正直に話していいですか');closeTopicsPopup()">🖤 本当の気持ちを話したい</button>
+        <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない');closeTopicsPopup()">🌱 自分自身の人生のこと</button>
+      </div>
+    </div>
     <div class="input-area">
+      <div style="text-align:right;margin-bottom:4px">
+        <button onclick="toggleTopicsPopup()" style="background:none;border:none;font-size:12px;color:var(--text-sub);cursor:pointer;padding:2px 6px">話題を選ぶ ▲</button>
+      </div>
       <div class="input-wrap">
         <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
         <button id="send-btn" onclick="sendMsg()">
@@ -560,6 +578,13 @@ function switchTab(t){
 const EMERGENCY_KEYWORDS = ['死にたい','しにたい','消えたい','死ね','しね','自殺','首吊り','飛び降り','死んでしまいたい','消えてしまいたい','もう終わりにしたい','殺したい','ころしたい'];
 let emergencyCount = 0;
 
+function toggleTopicsPopup(){
+  const p=document.getElementById('topics-popup');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+function closeTopicsPopup(){
+  document.getElementById('topics-popup').style.display='none';
+}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
 function hkKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendHakaba()}}

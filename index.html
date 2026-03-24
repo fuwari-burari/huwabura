@@ -430,7 +430,7 @@ function getPhasePrompt(){
 タイミングを見て、実際に話せる人への橋渡しをそっとする。ただし必ず「いまはまだ難しいと感じても、大丈夫です。」を先に渡す。安心を先に渡してから、可能性をそっと置く。「ここで話せたこと、覚えてますか。あのとき、言葉にできたんです。あなたは。」「いつか話したくなったとき、そのときでいいから。」急がない。強制しない。`;
 }
 
-const CHAT_SP = CHAT_SP_BASE + getPhasePrompt();
+// フェーズはメッセージ送信時に動的に計算する（下のsendMsgを参照）
 
 // 深夜判定
 function isLateNight(){
@@ -645,7 +645,7 @@ async function sendMsg(){
 
   showTyping();
   try{
-    const reply=await callAPI(CHAT_SP,hist);
+    const reply=await callAPI(CHAT_SP_BASE + getPhasePrompt(),hist);
     rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',reply);
   }catch(e){rmTyping();console.error('API Error:',e);addMsg('ai','少し接続が不安定なようです。もう一度話しかけてみてください。')}
   loading=false;document.getElementById('send-btn').disabled=false;

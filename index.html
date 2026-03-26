@@ -411,8 +411,8 @@ if(!localStorage.getItem('fuwari_start_date')){
 const startDate = new Date(localStorage.getItem('fuwari_start_date'));
 const monthsUsed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24 * 30));
 
-// 試運転モード（1〜8日目 → 0〜7ヶ月相当に換算）
-const SIM_DAY_LABELS = ['1日目（1ヶ月目）','2日目（2ヶ月目）','3日目（3ヶ月目）','4日目（4ヶ月目）','5日目（5ヶ月目）','6日目（6ヶ月目）','7日目（卒業前）','8日目（いってらっしゃい）'];
+// 試運転モード（1〜6日目 → 0〜5ヶ月に換算）
+const SIM_DAY_LABELS = ['1日目（1ヶ月目）','2日目（2ヶ月目）','3日目（3ヶ月目）','4日目（4ヶ月目）','5日目（5ヶ月目）','6日目（6ヶ月目）'];
 function getSimDay(){ return parseInt(localStorage.getItem('fuwarin_sim_day')||'0'); }
 function setSimDay(day){
   localStorage.setItem('fuwarin_sim_day', day);
@@ -427,7 +427,7 @@ function enterSimMode(){
   panel.style.display='block';
   const container = document.getElementById('sim-days');
   container.innerHTML='';
-  for(let i=1;i<=8;i++){
+  for(let i=1;i<=6;i++){
     const b=document.createElement('button');
     b.className='sim-day-btn';
     b.textContent=i+'日';

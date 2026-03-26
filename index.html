@@ -545,17 +545,17 @@ function saveTaisetsu(text,btn,e){
   const date=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
   list.unshift({text,date});
   localStorage.setItem('fuwarin_taisetsu',JSON.stringify(list.slice(0,200)));
-  btn.textContent='✨';
+  btn.textContent='✅';
   btn.classList.add('saved');
+  btn.disabled=true;
 
-  // 「そっと挟まれました」トースト
+  // トースト（画面下部に固定表示）
   const toast=document.createElement('div');
   toast.className='shiori-toast';
   toast.textContent='夜空に放ちました ✨';
-  toast.style.cssText=`left:${Math.max(rect.left-30,10)}px;top:${rect.top-28}px`;
+  toast.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,0.85);color:#d8e8f8;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;white-space:nowrap;animation:toastFade 2s ease forwards';
   document.body.appendChild(toast);
   setTimeout(()=>toast.remove(),2000);
-  btn.disabled=true;
   renderTaisetsu();
 }
 

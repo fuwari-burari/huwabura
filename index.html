@@ -634,11 +634,11 @@ function addMsg(role,text){
   if(role==='user'){
     const btn=document.createElement('button');
     btn.className='star-btn';
-    btn.style.cssText='background:none;border:none;font-size:14px;cursor:pointer;padding:2px 6px;opacity:0.4;display:block;margin-top:2px;transition:opacity .2s';
+    btn.style.cssText='display:block;margin-top:4px';
     btn.textContent='✨';
-    btn.title='この言葉にしおりを挟む ✨';
+    btn.title='夜空に放つ ✨';
     btn.onmouseover=()=>btn.style.opacity='1';
-    btn.onmouseout=()=>{ if(!btn.disabled) btn.style.opacity='0.4'; };
+    btn.onmouseout=()=>{ if(!btn.disabled) btn.style.opacity='1'; };
     btn.onclick=(e)=>saveTaisetsu(text,btn,e);
     m.appendChild(btn);
   }

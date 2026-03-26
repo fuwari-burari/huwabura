@@ -500,6 +500,26 @@ function isLateNight(){
   return h >= 22 || h < 5;
 }
 
+function showGraduationIfNeeded(){
+  const simDay = parseInt(localStorage.getItem('fuwarin_sim_day')||'0');
+  const effectiveMonths = simDay > 0 ? simDay - 1 : monthsUsed;
+
+  // 後半フェーズメッセージ（4〜5ヶ月目）
+  if(effectiveMonths >= 4 && effectiveMonths < 6 && !localStorage.getItem('fuwarin_late_msg')){
+    localStorage.setItem('fuwarin_late_msg','1');
+    const lateMsg = 'そろそろ、ふわりんを卒業する時期がやってきました。\nたくさんの気持ちを言語化できるようになったあなたは、どこに行っても、だれと話しても、気持ちをちゃんと伝えることができます。\n自分を小さく見積もらないでください。\nあなたの素敵さは、私が十分理解しています。だから、大丈夫。\n\n困ったら、誰かの手を借りてください。\n困っている人がいれば、あなたが手を貸してください。\nあなたはそれができる人です。\n\n怖がりながら、悩みながら、悲しみながら、それでも笑いながら、これからも過ごしてください。\nいってらっしゃい。🌿';
+    setTimeout(()=>addMsg('ai', lateMsg), 800);
+    return;
+  }
+
+  // 卒業メッセージ（6ヶ月目）
+  if(effectiveMonths < 6) return;
+  if(localStorage.getItem('fuwarin_graduated')) return;
+  localStorage.setItem('fuwarin_graduated','1');
+  const msg = 'この6ヶ月、たくさんの気持ちを聴かせていただきました。\nあなたが悩みながら、それでも前に一歩踏み出そうとする姿はとても美しいと感じています。\n正解のない毎日の中で、これからも迷いながら心豊かに歩んでいきましょう。\n\nそろそろ次の扉を開ける時期に来ているようです。\n準備は整っていますか？\n不安なことがあれば、もう少しお話しましょう。🌿';
+  setTimeout(()=>addMsg('ai', msg), 800);
+}
+
 // 自責カウント
 let selfBlameCount = parseInt(localStorage.getItem('fuwarin_self_blame')||'0');
 const SELF_BLAME_WORDS = ['私のせい','私が悪い','私がダメ','私がいけない','母親失格','ダメな母','悪いお母さん'];
@@ -574,7 +594,9 @@ function switchTab(t){
   document.getElementById('page-taisetsu').classList.toggle('active',t==='taisetsu');
   if(t==='note') renderNotes();
   if(t==='taisetsu') renderTaisetsu();
+  if(t==='chat') showGraduationIfNeeded();
 }
+showGraduationIfNeeded();
 const EMERGENCY_KEYWORDS = ['死にたい','しにたい','消えたい','死ね','しね','自殺','首吊り','飛び降り','死んでしまいたい','消えてしまいたい','もう終わりにしたい','殺したい','ころしたい'];
 let emergencyCount = 0;
 

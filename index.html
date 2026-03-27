@@ -28,15 +28,15 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 /* ─ チャット ─ */
 .welcome{padding:6px 0 4px;text-align:center;animation:fadeUp .8s ease both}
 .welcome-badge{display:inline-block;background:var(–accent-light);color:var(–accent);font-size:11px;letter-spacing:.12em;padding:4px 14px;border-radius:20px;margin-bottom:12px}
-.welcome h2{font-family:’Zen Maru Gothic’,sans-serif;font-size:22px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
-.welcome p{font-size:13px;color:var(–text-sub);line-height:1.9}
+.welcome h2{font-family:’Zen Maru Gothic’,sans-serif;font-size:30px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
+.welcome p{font-size:17px;color:var(–text-sub);line-height:1.9}
 #chat-messages{flex:1;overflow-y:auto;padding:4px 0 8px;display:flex;flex-direction:column;gap:16px;min-height:0}
 .message{display:flex;gap:10px;animation:fadeUp .4s ease both}
 .message.user{flex-direction:row-reverse}
 .avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
 .avatar.ai{background:linear-gradient(135deg,#e8c9a8,#c4a882);box-shadow:0 2px 6px var(–shadow)}
 .avatar.user-av{background:linear-gradient(135deg,#d4956a,#c4784a);box-shadow:0 2px 6px var(–shadow)}
-.bubble{max-width:75%;padding:12px 16px 18px;border-radius:17px;font-size:14px;line-height:1.85;letter-spacing:.02em;position:relative}
+.bubble{max-width:75%;padding:12px 16px 18px;border-radius:17px;font-size:19px;line-height:1.9;letter-spacing:.02em;position:relative}
 .message.ai .bubble{background:var(–warm-white);border:1px solid var(–border);border-top-left-radius:4px;box-shadow:0 2px 8px var(–shadow)}
 .message.user .bubble{background:#4a3728;color:#fff;border-top-right-radius:4px}
 .typing-indicator{display:flex;gap:10px;align-items:flex-end}
@@ -46,7 +46,7 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .topics{padding:0 0 14px;animation:fadeUp .9s ease both}
 .topics-label{font-size:11px;color:var(–text-sub);letter-spacing:.1em;margin-bottom:8px}
 .topics-grid{display:flex;flex-wrap:wrap;gap:7px}
-.topic-chip{background:var(–warm-white);border:1px solid var(–border);color:var(–deep-brown);font-size:12px;padding:6px 12px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:‘Zen Kaku Gothic New’,sans-serif}
+.topic-chip{background:var(–warm-white);border:1px solid var(–border);color:var(–deep-brown);font-size:16px;padding:10px 16px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:’Zen Kaku Gothic New’,sans-serif}
 .topic-chip:hover{background:var(–accent-light);border-color:var(–accent);color:var(–accent);transform:translateY(-1px)}
 
 /* 墓場 */
@@ -104,12 +104,12 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 .input-area{padding:12px 4px 22px;border-top:1px solid var(--border);background:var(--cream);position:sticky;bottom:0}
 .input-wrap{display:flex;gap:10px;align-items:flex-end;background:#fdf8f2;border:1.5px solid #d4c4b0;border-radius:12px;padding:14px 10px 14px 16px;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 8px rgba(122,92,62,0.06),inset 0 1px 3px rgba(0,0,0,0.03)}
 .input-wrap:focus-within{border-color:#a07850;box-shadow:0 2px 12px rgba(122,92,62,0.12),inset 0 1px 3px rgba(0,0,0,0.03)}
-textarea{flex:1;border:none;outline:none;background:transparent;font-family:’Zen Kaku Gothic New’,sans-serif;font-size:14px;color:var(--text-main);resize:none;max-height:120px;line-height:1.7}
+textarea{flex:1;border:none;outline:none;background:transparent;font-family:’Zen Kaku Gothic New’,sans-serif;font-size:18px;color:var(--text-main);resize:none;max-height:120px;line-height:1.7}
 textarea::placeholder{color:#8a7a70}
 #send-btn{width:38px;height:38px;border-radius:50%;border:none;background:#4a3728;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 #send-btn:hover{background:var(–accent);transform:scale(1.05)}
 #send-btn:disabled{background:var(–border);cursor:not-allowed;transform:none}
-.disclaimer{font-size:11px;color:var(–text-sub);text-align:center;padding:7px 0 0;line-height:1.7}
+.disclaimer{font-size:13px;color:var(–text-sub);text-align:center;padding:7px 0 0;line-height:1.7}
 
 /* ─ できたノート ─ */
 .note-page{padding:22px 0 40px}
@@ -196,7 +196,35 @@ textarea::placeholder{color:#8a7a70}
       <p>責めません。急かしません。<br>ただ、話を聞かせてください。</p>
     </div>
     <div id="chat-messages"></div>
-    <div class="topics" id="topics-section">
+    <div id="topics-popup" style="display:none;background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 12px var(--shadow)">
+      <div style="font-size:13px;color:var(--text-sub);margin-bottom:10px;letter-spacing:.1em">話題を選ぶ</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない');closeTopicsPopup()">😔 どうしたらいいかわからない</button>
+        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて、一日中ゲームばかりしています。どうしたらいいですか');closeTopicsPopup()">🌙 昼夜逆転・ゲームが心配</button>
+        <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です');closeTopicsPopup()">📚 学習の遅れが気になる</button>
+        <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう');closeTopicsPopup()">💔 自分を責めてしまう</button>
+        <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です');closeTopicsPopup()">👫 パートナーに理解されない</button>
+        <button class="topic-chip" onclick="st('学校の先生に相談したいけど、誰に話せばいいかわからない');closeTopicsPopup()">🏫 誰に相談すればいい？</button>
+        <button class="topic-chip" onclick="st('仕事をどうするか、お金のことも不安です');closeTopicsPopup()">💼 仕事・お金のこと</button>
+        <button class="topic-chip" onclick="st('子どもを病院に連れて行きたいけど、どこに行けばいいかわからない');closeTopicsPopup()">🏥 病院の選び方</button>
+        <button class="topic-chip" onclick="st('子どもに対して、きれいじゃない感情がある。正直に話していいですか');closeTopicsPopup()">🖤 本当の気持ちを話したい</button>
+        <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない');closeTopicsPopup()">🌱 自分自身の人生のこと</button>
+      </div>
+    </div>
+    <div class="input-area" id="input-area-main">
+      <div style="text-align:right;margin-bottom:4px">
+        <button onclick="toggleTopicsPopup()" style="background:none;border:none;font-size:13px;color:var(--text-sub);cursor:pointer;padding:2px 6px">話題を選ぶ ▲</button>
+      </div>
+      <div class="input-wrap">
+        <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
+        <button id="send-btn" onclick="sendMsg()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="disclaimer">ここはお話を聞く場所です。緊急のときは専門機関へご相談ください。</div>
+      <div style="text-align:center;padding:4px 0 0;font-size:12px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--deep-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
+    </div>
+    <div class="topics" id="topics-section" style="display:none">
       <div class="topics-label">よく話されるテーマ</div>
       <div class="topics-grid">
         <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない')">😔 どうしたらいいかわからない</button>
@@ -224,34 +252,6 @@ textarea::placeholder{color:#8a7a70}
         <p style="font-size:12px;color:#8a7060;margin-bottom:16px">虐待の相談は <strong>189</strong>（児童相談所）</p>
         <button class="emergency-close" onclick="closeEmergency()">ここに戻る</button>
       </div>
-    </div>
-    <div id="topics-popup" style="display:none;background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 12px var(--shadow)">
-      <div style="font-size:11px;color:var(--text-sub);margin-bottom:8px;letter-spacing:.1em">話題を選ぶ</div>
-      <div style="display:flex;flex-wrap:wrap;gap:7px">
-        <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない');closeTopicsPopup()">😔 どうしたらいいかわからない</button>
-        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて、一日中ゲームばかりしています。どうしたらいいですか');closeTopicsPopup()">🌙 昼夜逆転・ゲームが心配</button>
-        <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です');closeTopicsPopup()">📚 学習の遅れが気になる</button>
-        <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう');closeTopicsPopup()">💔 自分を責めてしまう</button>
-        <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です');closeTopicsPopup()">👫 パートナーに理解されない</button>
-        <button class="topic-chip" onclick="st('学校の先生に相談したいけど、誰に話せばいいかわからない');closeTopicsPopup()">🏫 誰に相談すればいい？</button>
-        <button class="topic-chip" onclick="st('仕事をどうするか、お金のことも不安です');closeTopicsPopup()">💼 仕事・お金のこと</button>
-        <button class="topic-chip" onclick="st('子どもを病院に連れて行きたいけど、どこに行けばいいかわからない');closeTopicsPopup()">🏥 病院の選び方</button>
-        <button class="topic-chip" onclick="st('子どもに対して、きれいじゃない感情がある。正直に話していいですか');closeTopicsPopup()">🖤 本当の気持ちを話したい</button>
-        <button class="topic-chip" onclick="st('子どものことで頭がいっぱいで、自分自身のことを考える余裕がない');closeTopicsPopup()">🌱 自分自身の人生のこと</button>
-      </div>
-    </div>
-    <div class="input-area">
-      <div style="text-align:right;margin-bottom:4px">
-        <button onclick="toggleTopicsPopup()" style="background:none;border:none;font-size:12px;color:var(--text-sub);cursor:pointer;padding:2px 6px">話題を選ぶ ▲</button>
-      </div>
-      <div class="input-wrap">
-        <textarea id="user-input" placeholder="今の気持ちを、自由に話してください…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>
-        <button id="send-btn" onclick="sendMsg()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-      <div class="disclaimer">ここはお話を聞く場所です。緊急のときは専門機関へご相談ください。</div>
-      <div style="text-align:center;padding:4px 0 0;font-size:10px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--deep-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
     </div>
     <button class="hakaba-toggle" onclick="toggleHakaba()" id="hakaba-toggle-btn" style="display:none">🤫 誰にも言えない気持ち</button>
     <div class="hakaba-panel" id="hakaba-panel">

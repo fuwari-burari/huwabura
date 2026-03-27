@@ -200,7 +200,8 @@ textarea::placeholder{color:#8a7a70}
       <div style="font-size:13px;color:var(--text-sub);margin-bottom:10px;letter-spacing:.1em">話題を選ぶ</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">
         <button class="topic-chip" onclick="st('子どもが学校に行けなくて、どうしたらいいかわからない');closeTopicsPopup()">😔 どうしたらいいかわからない</button>
-        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて、一日中ゲームばかりしています。どうしたらいいですか');closeTopicsPopup()">🌙 昼夜逆転・ゲームが心配</button>
+        <button class="topic-chip" onclick="st('子どもが昼夜逆転していて困っています');closeTopicsPopup()">🌙 昼夜逆転が心配</button>
+        <button class="topic-chip" onclick="st('子どもが一日中ゲームばかりしています。どうしたらいいですか');closeTopicsPopup()">🎮 ゲームばかりしている</button>
         <button class="topic-chip" onclick="st('勉強の遅れや進路がとても心配です');closeTopicsPopup()">📚 学習の遅れが気になる</button>
         <button class="topic-chip" onclick="st('自分が悪いお母さんなのかと思ってしまう');closeTopicsPopup()">💔 自分を責めてしまう</button>
         <button class="topic-chip" onclick="st('夫が不登校を理解してくれなくて孤独です');closeTopicsPopup()">👫 パートナーに理解されない</button>
@@ -213,7 +214,7 @@ textarea::placeholder{color:#8a7a70}
     </div>
     <div class="input-area" id="input-area-main">
       <div style="text-align:right;margin-bottom:4px">
-        <button onclick="toggleTopicsPopup()" style="background:none;border:none;font-size:13px;color:var(--text-sub);cursor:pointer;padding:2px 6px">話題を選ぶ ▲</button>
+        <button onclick="toggleTopicsPopup()" style="background:var(--warm-white);border:1px solid var(--border);color:var(--deep-brown);font-size:15px;padding:8px 16px;border-radius:20px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;letter-spacing:.04em">💬 話題を選ぶ</button>
       </div>
       <div class="input-wrap">
         <textarea id="user-input" placeholder="今の気持ちを話してね…" rows="1" oninput="ar(this)" onkeydown="hKey(event)"></textarea>

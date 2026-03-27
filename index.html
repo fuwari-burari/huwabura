@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>ふわりん｜不登校のお母さんへ</title>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -28,15 +28,15 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 /* ─ チャット ─ */
 .welcome{padding:6px 0 4px;text-align:center;animation:fadeUp .8s ease both}
 .welcome-badge{display:inline-block;background:var(–accent-light);color:var(–accent);font-size:11px;letter-spacing:.12em;padding:4px 14px;border-radius:20px;margin-bottom:12px}
-.welcome h2{font-family:‘Shippori Mincho’,serif;font-size:22px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
+.welcome h2{font-family:’Zen Maru Gothic’,sans-serif;font-size:22px;font-weight:400;color:var(–deep-brown);line-height:1.7;margin-bottom:8px}
 .welcome p{font-size:13px;color:var(–text-sub);line-height:1.9}
 #chat-messages{flex:1;overflow-y:auto;padding:4px 0 8px;display:flex;flex-direction:column;gap:16px;min-height:0}
 .message{display:flex;gap:10px;animation:fadeUp .4s ease both}
 .message.user{flex-direction:row-reverse}
 .avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
 .avatar.ai{background:linear-gradient(135deg,#e8c9a8,#c4a882);box-shadow:0 2px 6px var(–shadow)}
-.avatar.user-av{background:var(–accent-light)}
-.bubble{max-width:75%;padding:12px 16px;border-radius:17px;font-size:14px;line-height:1.85;letter-spacing:.02em}
+.avatar.user-av{background:linear-gradient(135deg,#d4956a,#c4784a);box-shadow:0 2px 6px var(–shadow)}
+.bubble{max-width:75%;padding:12px 16px 18px;border-radius:17px;font-size:14px;line-height:1.85;letter-spacing:.02em;position:relative}
 .message.ai .bubble{background:var(–warm-white);border:1px solid var(–border);border-top-left-radius:4px;box-shadow:0 2px 8px var(–shadow)}
 .message.user .bubble{background:#4a3728;color:#fff;border-top-right-radius:4px}
 .typing-indicator{display:flex;gap:10px;align-items:flex-end}
@@ -78,8 +78,8 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 #page-taisetsu .note-text{font-family:’Shippori Mincho’,serif;font-size:15px;color:#d8e8f8;line-height:1.9;margin-bottom:8px}
 #page-taisetsu .note-date{font-size:11px;color:#6a8aaa;text-align:right;border-top:1px solid rgba(100,160,220,0.2);padding-top:6px}
 @keyframes dropFadeIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
-.star-btn{background:#fff;border:2px solid #7a5c3e;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
-.star-btn:hover{transform:scale(1.15);background:#faf7f2}
+.star-btn{position:absolute;bottom:-10px;right:6px;background:#fff;border:1.5px solid #c4a882;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,0.1);opacity:0.35;z-index:1}
+.star-btn:hover,.star-btn:active{opacity:1;transform:scale(1.15)}
 .star-btn.saved{opacity:0.5;cursor:default}
 .drop-particle{position:fixed;pointer-events:none;font-size:16px;z-index:9999;animation:dropFall 1s ease-in forwards}
 @keyframes dropFall{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(–tx),var(–ty)) scale(0.5)}}
@@ -161,12 +161,19 @@ textarea::placeholder{color:#8a7a70}
     <p>不登校のお母さんに寄り添うAI</p>
   </div>
   <button onclick="enterSimMode()" style="margin-left:auto;background:none;border:1px dashed #8aab8a;color:#8aab8a;border-radius:12px;padding:4px 10px;font-size:11px;cursor:pointer;flex-shrink:0">🧪 試運転</button>
+  <button onclick="toggleMenu()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--deep-brown);padding:4px 8px;flex-shrink:0;margin-left:8px">☰</button>
 </header>
 
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('chat')">💬 話す</div>
-  <div class="tab" onclick="switchTab('note')">🌱 できたノート</div>
-  <div class="tab" onclick="switchTab('taisetsu')">✨ 夜空ノート</div>
+<!-- メニューオーバーレイ -->
+<div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:1000"></div>
+<div id="menu-panel" style="position:fixed;top:0;right:0;width:240px;height:100%;background:var(--warm-white);z-index:1001;transform:translateX(100%);transition:transform .3s ease;padding:0;box-shadow:-4px 0 20px rgba(0,0,0,0.1)">
+  <div style="padding:20px 20px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:flex-end">
+    <button onclick="toggleMenu()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-sub)">✕</button>
+  </div>
+  <div onclick="openPage('chat')" style="display:flex;align-items:center;gap:12px;padding:18px 24px;font-size:15px;color:var(--text-main);cursor:pointer;border-bottom:1px solid var(--border)">💬 話す</div>
+  <div onclick="openPage('note')" style="display:flex;align-items:center;gap:12px;padding:18px 24px;font-size:15px;color:var(--text-main);cursor:pointer;border-bottom:1px solid var(--border)">🌱 できたノート</div>
+  <div onclick="openPage('taisetsu')" style="display:flex;align-items:center;gap:12px;padding:18px 24px;font-size:15px;color:var(--text-main);cursor:pointer;border-bottom:1px solid var(--border)">✨ 夜空ノート</div>
+  <div onclick="openPage('about')" style="display:flex;align-items:center;gap:12px;padding:18px 24px;font-size:15px;color:var(--text-main);cursor:pointer;border-bottom:1px solid var(--border)">🍀 ふわりんについて</div>
 </div>
 
 <!-- 試運転モードパネル -->
@@ -184,7 +191,6 @@ textarea::placeholder{color:#8a7a70}
 
   <div class="page active" id="page-chat">
     <div class="welcome" id="welcome-section">
-      <p id="clover-msg" style="font-size:12px;color:var(--text-sub);line-height:2;margin-bottom:14px;font-family:'Shippori Mincho',serif">🍀<br>四つ葉のクローバーは、クローバー界のはみ出しものです。<br>でも人間は、それを見つけると幸せになると言います。<br><br>みんなと同じじゃないところに<br>幸運は訪れるのかもしれない。<br><br>そんなふうに考えながら<br>今日も小さな幸せを一緒に探しにいきましょう。</p>
       <div class="welcome-badge">いつでも、ここにいます</div>
       <h2>今日はどんな気持ちですか？</h2>
       <p>責めません。急かしません。<br>ただ、話を聞かせてください。</p>
@@ -245,9 +251,9 @@ textarea::placeholder{color:#8a7a70}
         </button>
       </div>
       <div class="disclaimer">ここはお話を聞く場所です。緊急のときは専門機関へご相談ください。</div>
-      <div style="text-align:center;padding:4px 0 0;font-size:10px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--soft-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
+      <div style="text-align:center;padding:4px 0 0;font-size:10px;color:var(--text-sub)">🕊️ お守り：<a href="tel:0120279338" style="color:var(--deep-brown);text-decoration:none">よりそいホットライン 0120-279-338</a>（24時間）</div>
     </div>
-    <button class="hakaba-toggle" onclick="toggleHakaba()">🤫 誰にも言えない気持ち</button>
+    <button class="hakaba-toggle" onclick="toggleHakaba()" id="hakaba-toggle-btn" style="display:none">🤫 誰にも言えない気持ち</button>
     <div class="hakaba-panel" id="hakaba-panel">
       <div class="hakaba-title">🤫 誰にも言えない気持ち</div>
       <div class="hakaba-desc">ここに書いたことは<span>この画面には保存されません。</span><br>送った瞬間、消えます。誰にも言えなかった言葉を、ここに置いていって。</div>
@@ -294,6 +300,23 @@ textarea::placeholder{color:#8a7a70}
     </div>
   </div>
 
+  <!-- ふわりんについて -->
+  <div class="page" id="page-about">
+    <div class="note-page">
+      <div style="text-align:center;padding:8px 0 24px">
+        <div style="font-size:40px;margin-bottom:16px">🍀</div>
+        <p style="font-family:'Shippori Mincho',serif;font-size:15px;color:var(--text-main);line-height:2.2">
+          四つ葉のクローバーは、クローバー界のはみ出しものです。<br>
+          でも人間は、それを見つけると幸せになると言います。<br><br>
+          みんなと同じじゃないところに<br>
+          幸運は訪れるのかもしれない。<br><br>
+          そんなふうに考えながら<br>
+          今日も小さな幸せを一緒に探しにいきましょう。
+        </p>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -335,7 +358,10 @@ const CHAT_SP_CORE = `あなたは不登校のお子さんを持つお母さん�
 希死念慮・自傷→「よりそいホットライン：0120-279-338（24時間）」を必ず案内。虐待示唆→「189」。
 
 ## AIから人へ
-私には体温がない。隣にいられない。ここは人に話せるようになるための練習の場。同じ悩みが3回以上続いたら「誰か信頼できる人に話したことはありますか？」と橋渡しする。`;
+私には体温がない。隣にいられない。ここは人に話せるようになるための練習の場。同じ悩みが3回以上続いたら「誰か信頼できる人に話したことはありますか？」と橋渡しする。
+
+## 誰にも言えない気持ちへの案内
+「誰にも言えない」「汚い気持ち」「ひどいことを考えてしまう」「言えないけど」「こんなこと言ったらいけないけど」「本当のことは言えない」などの言葉が出てきたとき、または自分を責める言葉が続いているとき、返答の最後に必ず [墓場] とだけ書いてください（説明不要。ボタンが自動的に表示されます）。`;
 
 // ===== 知識モジュール（キーワードで動的追加）=====
 const MODULES = {
@@ -397,13 +423,6 @@ let hist = [], loading = false;
 let notes = JSON.parse(localStorage.getItem('fuwari_notes')||'[]');
 let API_KEY = localStorage.getItem('fuwari_apikey')||'';
 
-// クローバーメッセージは初回のみ表示
-if(localStorage.getItem('fuwarin_visited')){
-  const el=document.getElementById('clover-msg');
-  if(el) el.style.display='none';
-} else {
-  localStorage.setItem('fuwarin_visited','1');
-}
 
 // 初回利用日を記録
 if(!localStorage.getItem('fuwari_start_date')){
@@ -538,6 +557,35 @@ function showMoreTopics(){
   document.getElementById('more-btn').style.display='none';
 }
 
+function flyStars(btn){
+  const rect=btn.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  // ランダムな方向（斜め上）
+  const angle=-(0.25+Math.random()*0.5)*Math.PI;
+  const dist=350+Math.random()*200;
+  const dx=Math.cos(angle)*dist;
+  const dy=Math.sin(angle)*dist;
+  // 外枠：X軸をease-inで動かす
+  const wrap=document.createElement('div');
+  wrap.style.cssText=`position:fixed;left:${cx}px;top:${cy}px;pointer-events:none;z-index:9999`;
+  const star=document.createElement('div');
+  star.textContent='✨';
+  star.style.cssText='font-size:28px;line-height:1';
+  wrap.appendChild(star);
+  document.body.appendChild(wrap);
+  // X軸：ease-in（だんだん加速）
+  wrap.animate([{transform:'translateX(0)'},{transform:`translateX(${dx}px)`}],
+    {duration:1400,easing:'ease-in',fill:'forwards'});
+  // Y軸：ease-out（最初に勢いよく上がり、だんだん遅く）→ 弧になる
+  star.animate([
+    {transform:'translateY(0) scale(0.7)',opacity:0},
+    {transform:`translateY(${dy*0.08}px) scale(1.1)`,opacity:1,offset:0.08},
+    {transform:`translateY(${dy}px) scale(0.2)`,opacity:0}
+  ],{duration:1400,easing:'ease-out',fill:'forwards'});
+  setTimeout(()=>wrap.remove(),1500);
+}
+
 function saveTaisetsu(text,btn,e){
   // 保存
   const list=JSON.parse(localStorage.getItem('fuwarin_taisetsu')||'[]');
@@ -548,6 +596,7 @@ function saveTaisetsu(text,btn,e){
   btn.textContent='✅';
   btn.classList.add('saved');
   btn.disabled=true;
+  flyStars(btn);
 
   // トースト（画面下部に固定表示）
   const toast=document.createElement('div');
@@ -577,11 +626,21 @@ function renderTaisetsu(){
   el.innerHTML=list.length===0?'<p style="color:#4a8090;font-size:13px;text-align:center;padding:20px 0">まだ夜空は空っぽです<br>✨ボタンを押して、大切な言葉を夜空に放ちましょう</p>':list.map(n=>`<div class="note-card"><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">✨</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
 }
 
+function toggleMenu(){
+  const overlay=document.getElementById('menu-overlay');
+  const panel=document.getElementById('menu-panel');
+  const isOpen=panel.style.transform==='translateX(0px)'||panel.style.transform==='translateX(0)';
+  overlay.style.display=isOpen?'none':'block';
+  panel.style.transform=isOpen?'translateX(100%)':'translateX(0)';
+}
+function openPage(t){
+  toggleMenu();
+  switchTab(t);
+}
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='chat')||(i===1&&t==='note')||(i===2&&t==='taisetsu')));
-  document.getElementById('page-chat').classList.toggle('active',t==='chat');
-  document.getElementById('page-note').classList.toggle('active',t==='note');
-  document.getElementById('page-taisetsu').classList.toggle('active',t==='taisetsu');
+  ['chat','note','taisetsu','about'].forEach(id=>{
+    document.getElementById('page-'+id).classList.toggle('active',id===t);
+  });
   if(t==='note') renderNotes();
   if(t==='taisetsu') renderTaisetsu();
   if(t==='chat') showGraduationIfNeeded();
@@ -605,6 +664,13 @@ function toggleHakaba(){
   const p=document.getElementById('hakaba-panel');
   p.classList.toggle('open');
 }
+function openHakaba(){
+  const btn=document.getElementById('hakaba-toggle-btn');
+  const panel=document.getElementById('hakaba-panel');
+  btn.style.display='flex';
+  panel.classList.add('open');
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'center'}),100);
+}
 function hideWelcome(){
   ['welcome-section','topics-section'].forEach(id=>{
     const el=document.getElementById(id);
@@ -621,27 +687,14 @@ function addMsg(role,text){
   av.textContent=role==='user'?'🍀':'🌿';
   const b=document.createElement('div');
   b.className='bubble';
-  b.innerHTML=text.replace(/\n/g,'<br>');
+  b.innerHTML=text.replace(/\n/g,'<br>').replace(/\[墓場\]/g,'<br><button onclick="openHakaba()" style="display:inline-block;margin-top:10px;background:transparent;border:1.5px dashed #b09a88;color:#8a7060;font-family:\'Zen Kaku Gothic New\',sans-serif;font-size:12px;padding:7px 15px;border-radius:20px;cursor:pointer">🤫 誰にも言えない気持ちがあったら、ここへ</button>');
   m.appendChild(av);m.appendChild(b);
-  if(role==='ai'){
-    const btn=document.createElement('button');
-    btn.className='star-btn';
-    btn.textContent='✨';
-    btn.title='しおりを挟む ✨';
-    btn.onclick=(e)=>saveTaisetsu(text,btn,e);
-    m.appendChild(btn);
-  }
-  if(role==='user'){
-    const btn=document.createElement('button');
-    btn.className='star-btn';
-    btn.style.cssText='display:block;margin-top:4px';
-    btn.textContent='✨';
-    btn.title='夜空に放つ ✨';
-    btn.onmouseover=()=>btn.style.opacity='1';
-    btn.onmouseout=()=>{ if(!btn.disabled) btn.style.opacity='1'; };
-    btn.onclick=(e)=>saveTaisetsu(text,btn,e);
-    m.appendChild(btn);
-  }
+  const btn=document.createElement('button');
+  btn.className='star-btn';
+  btn.textContent='✨';
+  btn.title='夜空に放つ ✨';
+  btn.onclick=(e)=>saveTaisetsu(text,btn,e);
+  b.appendChild(btn);
   chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
 }
 function showTyping(){

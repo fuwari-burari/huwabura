@@ -626,7 +626,7 @@ function saveTaisetsu(text,btn,e){
   const date=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
   list.unshift({text,date});
   localStorage.setItem('fuwarin_taisetsu',JSON.stringify(list.slice(0,200)));
-  btn.textContent='✅';
+  btn.textContent='○';
   btn.classList.add('saved');
   btn.disabled=true;
   flyStars(btn);

@@ -564,19 +564,19 @@ function showGraduationIfNeeded(){
   if(localStorage.getItem('fuwarin_graduated')){ disableInput(); return; }
   const simDay = parseInt(localStorage.getItem('fuwarin_sim_day')||'0');
   const effectiveMonths = simDay > 0 ? simDay - 1 : monthsUsed;
-  const simDayToDays = [0,30,60,90,120,150,180,195,210];
+  const simDayToDays = [0,30,60,90,120,150,173,180,210];
   const effectiveDays = simDay > 0 ? simDayToDays[simDay] : Math.floor((new Date() - new Date(localStorage.getItem('fuwari_start_date'))) / (1000*60*60*24));
 
-  // 6ヶ月目の始め（180〜195日）
-  if(effectiveDays >= 180 && effectiveDays < 195 && !localStorage.getItem('fuwarin_grad_mid')){
+  // 卒業予告（173〜180日）
+  if(effectiveDays >= 173 && effectiveDays < 180 && !localStorage.getItem('fuwarin_grad_mid')){
     localStorage.setItem('fuwarin_grad_mid','1');
-    const midMsg = 'この6ヶ月、たくさんの気持ちを聴かせていただきました。\nあなたが悩みながら、それでも前に一歩踏み出そうとする姿はとても美しいと感じています。\n正解のない毎日の中で、これからも迷いながら心豊かに歩んでいきましょう。\n\nそろそろ次の扉を開ける時期に来ているようです。\n準備は整っていますか？\n不安なことがあれば、もう少しお話しましょう。🌿';
+    const midMsg = 'この6ヶ月、たくさんの気持ちを聴かせていただきました。\nあなたが悩みながら、それでも前に一歩踏み出そうとする姿はとても美しいと感じています。\n正解のない毎日の中で、これからも迷いながら心豊かに歩んでいきましょう。\n\nそろそろ次の扉を開ける時期に来ているようです。\nあと一週間ほど、ここでお話できます。\n準備が整ったら、いつでも話しかけてください。🌿';
     setTimeout(()=>addMsg('ai', midMsg), 800);
     return;
   }
 
-  // 6ヶ月の終わり（195日以降）
-  if(effectiveDays < 195) return;
+  // 卒業・ロック（180日以降）
+  if(effectiveDays < 180) return;
   lockGraduated();
 }
 

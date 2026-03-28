@@ -813,7 +813,10 @@ async function sendMsg(){
 
   // ニックネーム取得
   if(nicknamePending){
-    nickname=text;
+    // 「〜で」「〜です」「〜って呼んで」などを除いて名前だけ取り出す
+    let name=text.replace(/[、。　\s]/g,'');
+    name=name.replace(/(って呼んで.*|でお願い.*|と申し.*|といいます.*|といます.*|です$|で$|よ$|ね$)/,'');
+    nickname=name||text;
     localStorage.setItem('fuwarin_nickname',nickname);
     nicknamePending=false;
     inp.value='';inp.style.height='auto';

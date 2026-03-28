@@ -968,6 +968,13 @@ async function sendHakaba(){
   document.getElementById('hakaba-send').disabled=false;
 }
 
+const NOTE_MILESTONES = {
+  5:  '5つ積み重なりましたね。ひとつひとつ、ちゃんと受け取っています。🌱',
+  10: '10個になりました。自分を大事にできた瞬間が、10個あったんです。',
+  30: '30個。ひとつひとつ、ちゃんとここにあります。',
+  50: '50個。あなたはずっと、自分を大事にしようとしていたんですね。'
+};
+
 async function submitNote(){
   const inp=document.getElementById('note-input');
   const text=inp.value.trim();
@@ -979,11 +986,28 @@ async function submitNote(){
     const res=document.getElementById('note-res');
     res.innerHTML=reply.replace(/\n/g,'<br>');
     res.classList.add('show');
-    const note={text,date:new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}),reply};
+    const now=new Date();
+    const dateKey=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+    const dateLabel=now.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
+    const timeLabel=now.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+    const note={text,dateKey,dateLabel,timeLabel,reply};
     notes.unshift(note);
     localStorage.setItem('fuwari_notes',JSON.stringify(notes.slice(0,200)));
     renderNotes();
     inp.value='';inp.style.height='auto';
+    // 節目チェック
+    const count=notes.length;
+    const lastMilestone=parseInt(localStorage.getItem('fuwarin_note_milestone')||'0');
+    const milestone=Object.keys(NOTE_MILESTONES).map(Number).filter(n=>n<=count&&n>lastMilestone).pop();
+    if(milestone){
+      localStorage.setItem('fuwarin_note_milestone',milestone);
+      setTimeout(()=>{
+        const m=document.createElement('div');
+        m.style.cssText='background:var(--green-light);border:1px solid #c0d8b8;border-radius:14px;padding:16px 18px;margin:16px 0;font-size:14px;color:#3a5a3a;line-height:1.9;text-align:center;animation:fadeUp .4s ease both';
+        m.innerHTML='🌿 '+NOTE_MILESTONES[milestone];
+        document.getElementById('notes-list').prepend(m);
+      },1000);
+    }
   }catch{alert('接続に問題があります。もう一度お試しください。')}
   btn.disabled=false;btn.textContent='受け取ってもらう 🌿';
 }
@@ -995,13 +1019,25 @@ function renderNotes(){
     list.innerHTML='<div class="note-empty">まだ記録がありません。<br>小さなことを、ここに置いていってください。</div>';
     return;
   }
-  list.innerHTML=notes.map(n=>`
-    <div class="note-item">
-      <div class="note-icon">🌱</div>
-      <div class="note-body">
-        <div class="note-text">${n.text.replace(/\n/g,'<br>')}</div>
-        <div class="note-date">${n.date}</div>
-      </div>
+  // 日付ごとにグループ化
+  const groups={};
+  notes.forEach(n=>{
+    const key=n.dateKey||n.date||'';
+    const label=n.dateLabel||n.date||'';
+    if(!groups[key]) groups[key]={label,items:[]};
+    groups[key].items.push(n);
+  });
+  list.innerHTML=Object.entries(groups).map(([key,g])=>`
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;color:var(--text-sub);letter-spacing:.08em;margin-bottom:8px;padding-left:4px">${g.label}</div>
+      ${g.items.map(n=>`
+        <div class="note-item">
+          <div class="note-icon">🌱</div>
+          <div class="note-body">
+            <div class="note-text">${n.text.replace(/\n/g,'<br>')}</div>
+            ${n.timeLabel?`<div class="note-date">${n.timeLabel}</div>`:''}
+          </div>
+        </div>`).join('')}
     </div>`).join('');
 }
 renderNotes();

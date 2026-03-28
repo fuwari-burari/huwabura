@@ -560,6 +560,30 @@ function isLateNight(){
   return h >= 22 || h < 5;
 }
 
+function getSeasonalGreeting(){
+  const last = parseInt(localStorage.getItem('fuwarin_seasonal_last')||'0');
+  const now = Date.now();
+  const daysSince = (now - last) / (1000*60*60*24);
+  if(last && daysSince < 14) return '';
+  localStorage.setItem('fuwarin_seasonal_last', now);
+  const m = new Date().getMonth() + 1;
+  const greetings = {
+    1:  '新しい年が始まりましたね。寒い日が続いていますが、体は大丈夫ですか？',
+    2:  '寒い日が続いています。体調を崩されていませんか？',
+    3:  '卒業や進級の季節ですね。いろんな気持ちが押し寄せる時期だと思います。',
+    4:  '新学期が始まりました。桜がきれいな季節ですが、複雑な気持ちもありますよね。',
+    5:  '五月に入りました。少し疲れが出やすい時期です。無理していませんか？',
+    6:  '梅雨の季節ですね。体調を崩されていませんか？',
+    7:  '暑い日が続いています。水分はこまめにとっていただいて、お話しましょう。',
+    8:  '熱い日が続いていますね。熱中症に気をつけながら、ゆっくりお話しましょう。',
+    9:  '残暑が続いていますね。体は大丈夫ですか？',
+    10: '食欲の秋ですね。何かおいしいもの、食べましたか？',
+    11: '秋が深まってきましたね。',
+    12: '年末、何かと慌ただしい時期ですね。少し立ち止まって、お話しましょう。'
+  };
+  return greetings[m] + '\n\n';
+}
+
 function showGraduationIfNeeded(){
   if(localStorage.getItem('fuwarin_graduated')){ disableInput(); return; }
   const simDay = parseInt(localStorage.getItem('fuwarin_sim_day')||'0');
@@ -883,12 +907,13 @@ async function sendMsg(){
   const lateNightPrefix = (isLateNight() && hist.length === 1)
     ? lateNightMessages[Math.floor(Math.random()*lateNightMessages.length)] + '\n\n'
     : '';
+  const seasonalPrefix = (!isLateNight() && hist.length === 1) ? getSeasonalGreeting() : '';
 
   showTyping();
   try{
     const nicknamePrefix=nickname?`ユーザーの呼び名は「${nickname}さん」です。会話の中で自然に使ってください。\n\n`:'';
     const reply=await callAPI(nicknamePrefix + CHAT_SP_BASE + getPhasePrompt(),hist);
-    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',lateNightPrefix+reply);
+    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',lateNightPrefix+seasonalPrefix+reply);
   }catch(e){rmTyping();console.error('API Error:',e);addMsg('ai','少し接続が不安定なようです。もう一度話しかけてみてください。')}
   loading=false;document.getElementById('send-btn').disabled=false;
 }

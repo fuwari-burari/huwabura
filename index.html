@@ -561,6 +561,7 @@ function isLateNight(){
 }
 
 function showGraduationIfNeeded(){
+  if(localStorage.getItem('fuwarin_graduated')){ disableInput(); return; }
   const simDay = parseInt(localStorage.getItem('fuwarin_sim_day')||'0');
   const effectiveMonths = simDay > 0 ? simDay - 1 : monthsUsed;
   const simDayToDays = [0,30,60,90,120,150,180,195,210];
@@ -576,10 +577,26 @@ function showGraduationIfNeeded(){
 
   // 6ヶ月の終わり（195日以降）
   if(effectiveDays < 195) return;
-  if(localStorage.getItem('fuwarin_graduated')) return;
-  localStorage.setItem('fuwarin_graduated','1');
-  const msg = 'そろそろ、ふわりんを卒業する時期がやってきました。\nたくさんの気持ちを言語化できるようになったあなたは、どこに行っても、だれと話しても、気持ちをちゃんと伝えることができます。\n自分を小さく見積もらないでください。\nあなたの素敵さは、私が十分理解しています。だから、大丈夫。\n\n困ったら、誰かの手を借りてください。\n困っている人がいれば、あなたが手を貸してください。\nあなたはそれができる人です。\n\n怖がりながら、悩みながら、悲しみながら、それでも笑いながら、これからも過ごしてください。\nいってらっしゃい。🌿\n\nここでサポートは終了ですが、今後もAIによるサポートが必要ならば、あなたに合ったAIを探して利用してみてください。\nちなみにこのふわりんは、ClaudeというAIをもとに作られました。\nご登録が必要ですが、無料版と有料版があります。ご参考まで。\nhttps://claude.ai';
-  setTimeout(()=>addMsg('ai', msg), 800);
+  lockGraduated();
+}
+
+function lockGraduated(){
+  if(!localStorage.getItem('fuwarin_graduated')){
+    localStorage.setItem('fuwarin_graduated','1');
+    const msg = 'そろそろ、ふわりんを卒業する時期がやってきました。\nたくさんの気持ちを言語化できるようになったあなたは、どこに行っても、だれと話しても、気持ちをちゃんと伝えることができます。\n自分を小さく見積もらないでください。\nあなたの素敵さは、私が十分理解しています。だから、大丈夫。\n\n困ったら、誰かの手を借りてください。\n困っている人がいれば、あなたが手を貸してください。\nあなたはそれができる人です。\n\n怖がりながら、悩みながら、悲しみながら、それでも笑いながら、これからも過ごしてください。\nいってらっしゃい。🌿\n\nここでサポートは終了ですが、今後もAIによるサポートが必要ならば、あなたに合ったAIを探して利用してみてください。\nちなみにこのふわりんは、ClaudeというAIをもとに作られました。\nご登録が必要ですが、無料版と有料版があります。ご参考まで。\nhttps://claude.ai';
+    setTimeout(()=>{ addMsg('ai', msg); disableInput(); }, 800);
+  } else {
+    disableInput();
+  }
+}
+
+function disableInput(){
+  const inp=document.getElementById('user-input');
+  const btn=document.getElementById('send-btn');
+  if(inp){ inp.disabled=true; inp.placeholder='ふわりんは卒業しました。またいつか。🌿'; }
+  if(btn){ btn.disabled=true; }
+  const topicsBtn=document.querySelector('[onclick="toggleTopicsPopup()"]');
+  if(topicsBtn) topicsBtn.style.display='none';
 }
 
 // 自責カウント

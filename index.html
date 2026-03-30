@@ -339,6 +339,10 @@ textarea::placeholder{color:#8a7a70}
           小さな幸せを一緒に探しに行きましょう。
         </p>
       </div>
+      <div style="border-top:1px solid var(--border);padding-top:24px;text-align:center">
+        <div style="font-size:12px;color:var(--text-sub);margin-bottom:12px" id="nickname-display"></div>
+        <button onclick="changeNickname()" style="background:none;border:1px solid var(--border);color:var(--deep-brown);font-size:13px;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif">ニックネームを変更する</button>
+      </div>
     </div>
   </div>
 
@@ -708,6 +712,7 @@ function switchTab(t){
   if(t==='note') renderNotes();
   if(t==='taisetsu') renderTaisetsu();
   if(t==='chat') showGraduationIfNeeded();
+  if(t==='about') updateNicknameDisplay();
 }
 showGraduationIfNeeded();
 
@@ -753,7 +758,23 @@ function closeTopicsPopup(){
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 function hKey(e){}
 function hkKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendHakaba()}}
-function st(txt){document.getElementById('user-input').value=txt;sendMsg()}
+function st(txt){if(nicknamePending)return;document.getElementById('user-input').value=txt;sendMsg()}
+
+function changeNickname(){
+  const newName=prompt('新しいニックネームを入力してください（本名でなくて大丈夫です）');
+  if(!newName||!newName.trim())return;
+  let name=newName.trim().replace(/[、。　\s]/g,'');
+  name=name.replace(/(って呼んで.*|でお願い.*|と申し.*|といいます.*|といます.*|です$|で$|よ$|ね$)/,'');
+  nickname=name||newName.trim();
+  localStorage.setItem('fuwarin_nickname',nickname);
+  updateNicknameDisplay();
+  alert(nickname+'さんに変更しました。');
+}
+
+function updateNicknameDisplay(){
+  const el=document.getElementById('nickname-display');
+  if(el&&nickname) el.textContent='現在のニックネーム：'+nickname+'さん';
+}
 function toggleHakaba(){
   const p=document.getElementById('hakaba-panel');
   p.classList.toggle('open');

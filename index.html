@@ -1018,15 +1018,6 @@ function renderNotes(){
 }
 renderNotes();
 
-// スマホキーボード対応（visualViewport API）
-if(window.visualViewport){
-  window.visualViewport.addEventListener('resize', ()=>{
-    const inputArea = document.querySelector('.input-area');
-    if(!inputArea) return;
-    const offsetBottom = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-    inputArea.style.bottom = offsetBottom > 0 ? offsetBottom + 'px' : '0px';
-  });
-}
 </script>
 
 </body>

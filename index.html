@@ -51,23 +51,20 @@ header{width:100%;padding:20px 28px 16px;display:flex;align-items:center;gap:14p
 
 /* 墓場 */
 .hakaba-toggle{display:flex;align-items:center;gap:8px;background:transparent;border:1.5px dashed #b09a88;color:var(–text-sub);font-family:’Zen Kaku Gothic New’,sans-serif;font-size:12px;padding:7px 15px;border-radius:20px;cursor:pointer;transition:all .25s;margin:0 auto 12px}
-.hakaba-toggle:hover{background:#000;border-color:#444;color:#ccc}
-.hakaba-panel{display:none;background:#000;border:1px solid #222;border-radius:14px;padding:16px;margin-bottom:12px;animation:fadeUp .4s ease both}
+.hakaba-toggle:hover{background:#1a1210;border-color:#5a4a42;color:#c9b5a8}
+.hakaba-panel{display:none;background:#1a1210;border:1px solid #3a2e28;border-radius:14px;padding:16px;margin-bottom:12px;animation:fadeUp .4s ease both}
 .hakaba-panel.open{display:block}
-.hakaba-title{font-family:’Shippori Mincho’,serif;font-size:14px;color:#bbb;margin-bottom:5px}
-.hakaba-desc{font-size:11px;color:#666;line-height:1.8;margin-bottom:10px}
-.hakaba-desc span{color:#999}
-.hakaba-wrap{display:flex;gap:8px;align-items:flex-end;background:#0a0a0a;border:1px solid #333;border-radius:12px;padding:9px 9px 9px 14px}
-.hakaba-wrap:focus-within{border-color:#555}
-#hakaba-input{flex:1;border:none;outline:none;background:transparent;font-family:’Zen Kaku Gothic New’,sans-serif;font-size:13px;color:#ccc;resize:none;max-height:80px;line-height:1.7}
-#hakaba-input::placeholder{color:#444}
-#hakaba-send{width:32px;height:32px;border-radius:50%;border:none;background:#222;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-#hakaba-send:hover{background:#333}
-.hakaba-note{text-align:center;font-size:10px;color:#444;margin-top:7px}
-.hakaba-res{margin-top:10px;padding:12px 14px;background:#0a0a0a;border-radius:10px;font-size:13px;color:#bbb;line-height:1.85;display:none}
-.ghost-btn{position:fixed;bottom:76px;left:14px;width:42px;height:42px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;z-index:1000;animation:ghostBob 4s ease-in-out infinite;transition:background .2s;backdrop-filter:blur(4px)}
-.ghost-btn:hover{background:rgba(30,30,30,0.9)}
-@keyframes ghostBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.hakaba-title{font-family:’Shippori Mincho’,serif;font-size:14px;color:#c9b5a8;margin-bottom:5px}
+.hakaba-desc{font-size:11px;color:#7a6a62;line-height:1.8;margin-bottom:10px}
+.hakaba-desc span{color:#a08878}
+.hakaba-wrap{display:flex;gap:8px;align-items:flex-end;background:#120e0c;border:1px solid #3a2e28;border-radius:12px;padding:9px 9px 9px 14px}
+.hakaba-wrap:focus-within{border-color:#6a4a3a}
+#hakaba-input{flex:1;border:none;outline:none;background:transparent;font-family:’Zen Kaku Gothic New’,sans-serif;font-size:13px;color:#c9b5a8;resize:none;max-height:80px;line-height:1.7}
+#hakaba-input::placeholder{color:#4a3a34}
+#hakaba-send{width:32px;height:32px;border-radius:50%;border:none;background:#5a3828;color:#e8c9a8;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#hakaba-send:hover{background:#7a4838}
+.hakaba-note{text-align:center;font-size:10px;color:#5a4a42;margin-top:7px}
+.hakaba-res{margin-top:10px;padding:12px 14px;background:#120e0c;border-radius:10px;font-size:13px;color:#c9b5a8;line-height:1.85;display:none}
 #page-taisetsu{background:linear-gradient(180deg,#0a1628 0%,#0d1f3c 50%,#1a2f4a 100%);min-height:100vh}
 #page-taisetsu .note-page{background:transparent}
 #page-taisetsu .note-title{color:#e8eef8;font-family:’Shippori Mincho’,serif}
@@ -296,9 +293,9 @@ textarea::placeholder{color:#8a7a70}
         <button class="emergency-close" onclick="closeEmergency()">ここに戻る</button>
       </div>
     </div>
-    <button class="hakaba-toggle" onclick="toggleHakaba()" id="hakaba-toggle-btn" style="display:none">👻 誰にも言えない気持ち</button>
+    <button class="hakaba-toggle" onclick="toggleHakaba()" id="hakaba-toggle-btn" style="display:none">🤫 誰にも言えない気持ち</button>
     <div class="hakaba-panel" id="hakaba-panel">
-      <div class="hakaba-title">👻 誰にも言えない気持ち</div>
+      <div class="hakaba-title">🤫 誰にも言えない気持ち</div>
       <div class="hakaba-desc">ここに書いたことは<span>この画面には保存されません。</span><br>送った瞬間、消えます。誰にも言えなかった言葉を、ここに置いていって。</div>
       <div class="hakaba-wrap">
         <textarea id="hakaba-input" placeholder="消えたい、でも、ずるい、でも、なんでもいい…" rows="2" oninput="ar(this)" onkeydown="hkKey(event)"></textarea>
@@ -925,7 +922,7 @@ function addMsg(role,text){
   av.textContent=role==='user'?'🍀':'🌿';
   const b=document.createElement('div');
   b.className='bubble';
-  b.innerHTML=text.replace(/\n/g,'<br>').replace(/\[墓場\]/g,'<br><button onclick="openHakaba()" style="display:inline-block;margin-top:10px;background:transparent;border:1.5px dashed #b09a88;color:#8a7060;font-family:\'Zen Kaku Gothic New\',sans-serif;font-size:12px;padding:7px 15px;border-radius:20px;cursor:pointer">👻 誰にも言えない気持ちがあったら、ここへ</button>');
+  b.innerHTML=text.replace(/\n/g,'<br>').replace(/\[墓場\]/g,'<br><button onclick="openHakaba()" style="display:inline-block;margin-top:10px;background:transparent;border:1.5px dashed #b09a88;color:#8a7060;font-family:\'Zen Kaku Gothic New\',sans-serif;font-size:12px;padding:7px 15px;border-radius:20px;cursor:pointer">🤫 誰にも言えない気持ちがあったら、ここへ</button>');
   m.appendChild(av);m.appendChild(b);
   const btn=document.createElement('button');
   btn.className='star-btn';
@@ -1170,7 +1167,6 @@ renderNotes();
 
 </script>
 
-<button class="ghost-btn" onclick="openHakaba()" title="誰にも言えない気持ち">👻</button>
 
 </body>
 </html>

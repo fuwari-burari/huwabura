@@ -776,7 +776,7 @@ function renderTaisetsu(){
     setTimeout(()=>msg.remove(),7000);
     msg.style.transition='opacity 1s';
   }
-  el.innerHTML=list.length===0?'<p style="color:#4a8090;font-size:13px;text-align:center;padding:20px 0">まだ夜空は空っぽです<br>✨ボタンを押して、大切な言葉を夜空に放ちましょう</p>':list.map((n,i)=>`<div class="note-card" style="position:relative"><button onclick="deleteTaisetsu(${i})" style="position:absolute;top:8px;right:8px;background:none;border:none;color:#6a8aaa;font-size:14px;cursor:pointer;padding:2px 6px;opacity:0.6">×</button><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">✨</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
+  el.innerHTML=list.length===0?'<p style="color:#4a8090;font-size:13px;text-align:center;padding:20px 0">まだ夜空は空っぽです。<br><br>ふわりんとの会話の中で<br>心に響いた言葉の右下にある ✨ を押すと<br>ここに放たれます。</p>':list.map((n,i)=>`<div class="note-card" style="position:relative"><button onclick="deleteTaisetsu(${i})" style="position:absolute;top:8px;right:8px;background:none;border:none;color:#6a8aaa;font-size:14px;cursor:pointer;padding:2px 6px;opacity:0.6">×</button><div style="display:flex;gap:10px;align-items:flex-start"><div class="note-icon">✨</div><div><div class="note-text">${n.text.replace(/\n/g,'<br>')}</div><div class="note-date">${n.date}</div></div></div></div>`).join('');
 }
 
 function deleteTaisetsu(index){

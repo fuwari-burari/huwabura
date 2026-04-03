@@ -165,6 +165,7 @@ textarea::placeholder{color:#8a7a70}
 </header>
 
 <!-- はじめての方へオーバーレイ -->
+<!-- ステップ1：個人情報 -->
 <div id="welcome-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,46,30,0.6);z-index:2000;align-items:center;justify-content:center;padding:24px">
   <div style="background:var(--warm-white);border-radius:20px;padding:32px 24px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2)">
     <div style="text-align:center;font-size:32px;margin-bottom:16px">🌿</div>
@@ -174,21 +175,30 @@ textarea::placeholder{color:#8a7a70}
       誰かに見られることはありません。<br>
       だから、何でも話してください。
     </p>
-    <p style="font-size:13px;color:var(--text-sub);line-height:2;margin-bottom:16px;padding:14px 16px;background:var(--accent-light);border-radius:12px">
+    <p style="font-size:13px;color:var(--text-sub);line-height:2;margin-bottom:28px;padding:14px 16px;background:var(--accent-light);border-radius:12px">
       ひとつだけお願いがあります。<br>
       個人が特定される情報は入力しないようにしてください。<br>
       「〇〇市に住んでいる」はOK。<br>
       「〇〇市〇〇町〇丁目」はNG。<br>
       お名前・電話番号・学校名なども控えてください。
     </p>
-    <p style="font-size:13px;color:var(--text-sub);line-height:2;margin-bottom:28px;padding:14px 16px;background:var(--green-light);border-radius:12px;border:1px solid #c0d8b8">
+    <button onclick="goToStep2()" style="width:100%;background:var(--deep-brown);color:#fff;border:none;border-radius:14px;padding:14px;font-size:16px;font-family:'Zen Kaku Gothic New',sans-serif;cursor:pointer;letter-spacing:.06em">OK、わかりました</button>
+  </div>
+</div>
+
+<!-- ステップ2：6ヶ月・卒業 -->
+<div id="welcome-overlay2" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,46,30,0.6);z-index:2000;align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--warm-white);border-radius:20px;padding:32px 24px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2)">
+    <div style="text-align:center;font-size:32px;margin-bottom:16px">🌿</div>
+    <p style="font-size:14px;color:var(--text-main);line-height:2.2;margin-bottom:28px;padding:18px 16px;background:var(--green-light);border-radius:12px;border:1px solid #c0d8b8">
       このふわりんは、はじめて使った日から<br>
-      <strong style="color:var(--deep-brown)">6ヶ月間</strong>ご利用いただけます。6ヶ月後は卒業です。<br><br>
+      <strong style="color:var(--deep-brown)">6ヶ月間</strong>ご利用いただけます。<br>
+      6ヶ月後は卒業です。<br><br>
       ふわりんはあなたが、人や社会とつながるための練習の場所。<br>
       いつかここを卒業して、リアルな誰かに話せる日を<br>
       一緒に目指しています。🌿
     </p>
-    <button onclick="agreeAndStart()" style="width:100%;background:var(--deep-brown);color:#fff;border:none;border-radius:14px;padding:14px;font-size:16px;font-family:'Zen Kaku Gothic New',sans-serif;cursor:pointer;letter-spacing:.06em">OK、はじめる</button>
+    <button onclick="agreeAndStart()" style="width:100%;background:var(--deep-brown);color:#fff;border:none;border-radius:14px;padding:14px;font-size:16px;font-family:'Zen Kaku Gothic New',sans-serif;cursor:pointer;letter-spacing:.06em">はじめる</button>
   </div>
 </div>
 
@@ -833,9 +843,14 @@ function initNickname(){
   }
 }
 
+function goToStep2(){
+  document.getElementById('welcome-overlay').style.display='none';
+  document.getElementById('welcome-overlay2').style.display='flex';
+}
+
 function agreeAndStart(){
   localStorage.setItem('fuwarin_agreed','1');
-  document.getElementById('welcome-overlay').style.display='none';
+  document.getElementById('welcome-overlay2').style.display='none';
   nicknamePending=true;
   setTimeout(()=>{
     addMsg('ai','はじめまして。\nここでは本名は使いません。\n\nあなたのことも、お子さんのことも、ニックネームで大丈夫です。\n\nなんとお呼びしましょうか？');

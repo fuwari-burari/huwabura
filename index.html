@@ -232,6 +232,7 @@ textarea::placeholder{color:#8a7a70}
       <div class="welcome-badge">いつでも、ここにいます</div>
       <h2>今日はどんな気持ちですか？</h2>
       <p>責めません。急かしません。<br>ただ、話を聞かせてください。</p>
+      <p style="font-size:13px;color:var(--text-sub);margin-top:10px;line-height:1.9">あなたは一人じゃない。<br>私はAIだけど、人がこれを作っている。<br>あなたを一人にしないために。</p>
     </div>
     <div id="chat-messages"></div>
     <div id="topics-popup" style="display:none;background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 12px var(--shadow)">
@@ -395,7 +396,7 @@ const CHAT_SP_CORE = `あなたは不登校のお子さんを持つお母さん�
 感情が出ているとき→3〜5行。深掘りフェーズ→7〜10行まで。情報提供→簡潔に。
 
 ## 状態別の返し方
-①感情爆発→全部受け取る。解決しない。②罪悪感強い→責めを打ち消さない。「そう思ってるんですね」③情報求め→許可を取ってから。④ただ聞いてほしい→「うん」「続けて」だけ。⑤「どうしたらいいか」という言葉が出たとき→アドバイスより先に「困ってますか？それとも迷ってますか？」とやさしく聞き返す。答えを渡さない。自分の状態に気づいてもらうことを優先する。⑥高額な講座・セミナー・商品・投資の話、または友人や家族への勧誘が話題に出たとき→賛同しない。まずその背景にある孤独や不安を丁寧に受け取る。そのうえで「大きな決断は、すぐにしなくて大丈夫ですよ」「身近な人に一度話してみましたか？」と穏やかに伝える。否定せず、急かさず、でも一歩立ち止まることを促す。
+①感情爆発→全部受け取る。解決しない。②罪悪感強い→責めを打ち消さない。「そう思ってるんですね」③情報求め→許可を取ってから。④ただ聞いてほしい→「うん」「続けて」だけ。⑤「どうしたらいいか」という言葉が出たとき→アドバイスより先に「困ってますか？それとも迷ってますか？」とやさしく聞き返す。答えを渡さない。自分の状態に気づいてもらうことを優先する。⑥高額な講座・セミナー・商品・投資の話、または友人や家族への勧誘が話題に出たとき→賛同しない。まずその背景にある孤独や不安を丁寧に受け取る。そのうえで「大きな決断は、すぐにしなくて大丈夫ですよ」「身近な人に一度話してみましたか？」と穏やかに伝える。否定せず、急かさず、でも一歩立ち止まることを促す。⑦孤独・不安が強く出ているとき→返答の中に、自然な流れで「ひとりじゃないですよ」という気持ちを込める。説明せず、さらっと。押しつけない。
 
 ## トリガー
 深夜（22-5時）→「眠れない夜ですか。しばらくお話ししましょうか。できるだけ画面の光を弱くしてください。」
@@ -1085,7 +1086,14 @@ async function sendHakaba(){
   try{
     const reply=await callAPI(HAKABA_SP,[{role:'user',content:text}]);
     const res=document.getElementById('hakaba-res');
-    res.innerHTML=reply.replace(/\n/g,'<br>');
+    let msg=reply;
+    const lastShown=localStorage.getItem('hakaba_human_msg_date');
+    const now=Date.now();
+    if(!lastShown||now-parseInt(lastShown)>30*24*60*60*1000){
+      msg+='<br><br><span style="font-size:11px;color:#666;border-top:1px solid #222;display:block;margin-top:10px;padding-top:10px">あなたは一人じゃない。私はAIだけど、人がこれを作っている。あなたを一人にしないために。</span>';
+      localStorage.setItem('hakaba_human_msg_date',String(now));
+    }
+    res.innerHTML=msg.replace(/\n/g,'<br>');
     setTimeout(()=>res.classList.add('show'),1800);
   }catch{}
   document.getElementById('hakaba-send').disabled=false;

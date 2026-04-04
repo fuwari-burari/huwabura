@@ -671,7 +671,11 @@ const HAKABA_SP = `あなたは「誰にも言えない気持ち」を受け取�
 const NOTE_SP = `あなたはお母さんの「できたこと」を受け取る場所。どんなに小さなことでも全力で受け取る。「それ、よかった」「ちゃんと自分を大事にできた」と伝える。比べない。評価しない。短く（3〜5行）温かく返す。
 「誰かに頼れた」「助けを求めた」「甘えた」という報告が来たとき：特に全力で受け取る。「それ、すごく大事なことだと思います」「頼れたこと、それ自体がもう十分な一歩だった」と伝える。頼ること・甘えることは弱さじゃないと、ちゃんと届ける。`;
 
-let hist = [], loading = false;
+let hist = JSON.parse(localStorage.getItem('fuwari_hist')||'[]'), loading = false;
+
+function saveHist(){
+  localStorage.setItem('fuwari_hist', JSON.stringify(hist.slice(-60)));
+}
 let notes = JSON.parse(localStorage.getItem('fuwari_notes')||'[]');
 let API_KEY = localStorage.getItem('fuwari_apikey')||'';
 let nickname = localStorage.getItem('fuwarin_nickname')||'';
@@ -959,6 +963,11 @@ function initNickname(){
     // 2回目以降
     const h2=document.querySelector('.welcome h2');
     if(h2) h2.textContent=nickname+'さん、今日はどんな気持ちですか？';
+    // 過去の会話を復元
+    if(hist.length > 0){
+      hideWelcome();
+      hist.forEach(m => addMsg(m.role==='user'?'user':'ai', m.content));
+    }
   }
 }
 
@@ -1130,7 +1139,7 @@ async function sendMsg(){
 
   loading=true;document.getElementById('send-btn').disabled=true;
   inp.value='';inp.style.height='auto';
-  addMsg('user',text);hist.push({role:'user',content:text});
+  addMsg('user',text);hist.push({role:'user',content:text});saveHist();
 
   const lateNightMessages = [
     '眠れない夜ですか。\nしばらくお話ししましょうか。\nできるだけ画面の光を弱くしてください。🌙',
@@ -1149,7 +1158,7 @@ async function sendMsg(){
   try{
     const nicknamePrefix=nickname?`ユーザーの呼び名は「${nickname}さん」です。会話の中で自然に使ってください。\n\n`:'';
     const reply=await callAPI(nicknamePrefix + CHAT_SP_BASE + getPhasePrompt(),hist);
-    rmTyping();hist.push({role:'assistant',content:reply});addMsg('ai',lateNightPrefix+reply);
+    rmTyping();hist.push({role:'assistant',content:reply});saveHist();addMsg('ai',lateNightPrefix+reply);
   }catch(e){rmTyping();console.error('API Error:',e);addMsg('ai','少し接続が不安定なようです。もう一度話しかけてみてください。')}
   loading=false;document.getElementById('send-btn').disabled=false;
 }

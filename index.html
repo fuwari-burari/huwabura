@@ -196,7 +196,7 @@ textarea::placeholder{color:#8a7a70}
       <strong style="color:var(--deep-brown)">6ヶ月間</strong>ご利用いただけます。<br>
       6ヶ月後は卒業です。<br><br>
       ふわりんはあなたが、人や社会とつながるための練習の場所。<br>
-      いつかここを卒業して、リアルな誰かに話せる日を<br>
+      いつかここを卒業して、リアルな誰かに話せる日を
       一緒に目指しています。🌿
     </p>
     <button onclick="agreeAndStart()" style="width:100%;background:var(--deep-brown);color:#fff;border:none;border-radius:14px;padding:14px;font-size:16px;font-family:'Zen Kaku Gothic New',sans-serif;cursor:pointer;letter-spacing:.06em">はじめる</button>
@@ -1035,7 +1035,7 @@ function initNickname(){
     // 同意済み・ニックネーム未設定
     nicknamePending=true;
     setTimeout(()=>{
-      addMsg('ai','はじめまして。\nここでは本名は使いません。\n\nあなたのことも、お子さんのことも、ニックネームで大丈夫です。\n\nなんとお呼びしましょうか？');
+      addMsg('ai','はじめまして。\nここでは本名は使いません。\n\nあなたのことも、お子さんのことも、ニックネームで大丈夫です。\n\nあなたのことを、なんとお呼びしましょうか？');
     },600);
   } else {
     // 2回目以降
@@ -1059,7 +1059,7 @@ function agreeAndStart(){
   document.getElementById('welcome-overlay2').style.display='none';
   nicknamePending=true;
   setTimeout(()=>{
-    addMsg('ai','はじめまして。\nここでは本名は使いません。\n\nあなたのことも、お子さんのことも、ニックネームで大丈夫です。\n\nなんとお呼びしましょうか？');
+    addMsg('ai','はじめまして。\nここでは本名は使いません。\n\nあなたのことも、お子さんのことも、ニックネームで大丈夫です。\n\nあなたのことを、なんとお呼びしましょうか？');
   },400);
 }
 

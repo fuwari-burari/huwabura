@@ -953,7 +953,8 @@ function flyStars(btn){
 }
 
 function saveTaisetsu(text,btn,e){
-  // 保存
+  // [墓場]タグを除去してから保存
+  text=text.replace(/\[墓場\]/g,'').trim();
   const list=JSON.parse(localStorage.getItem('fuwarin_taisetsu')||'[]');
   const now=new Date();
   const date=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;

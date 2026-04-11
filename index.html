@@ -1037,10 +1037,11 @@ function initNickname(){
     // 2回目以降
     const h2=document.querySelector('.welcome h2');
     if(h2) h2.textContent=nickname+'さん、今日はどんな気持ちですか？';
-    // 過去の会話を復元
+    // 過去の会話を復元（直近10件のみ表示）
     if(hist.length > 0){
       hideWelcome();
-      hist.forEach(m => addMsg(m.role==='user'?'user':'ai', m.content));
+      const recent = hist.slice(-10);
+      recent.forEach(m => addMsg(m.role==='user'?'user':'ai', m.content));
     }
   }
 }
